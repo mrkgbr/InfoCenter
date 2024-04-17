@@ -25,7 +25,7 @@ namespace InfoCenter.Api.Controllers
             return Ok(unitsDTO);
         }
 
-        [HttpGet("{id}", Name = "GetById")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
             var unit = await _unitRepository.GetByIdAsync(id);
@@ -40,7 +40,7 @@ namespace InfoCenter.Api.Controllers
         {
             var unit = await _unitRepository.CreateAsync(unitDTO.ToModelFromCreateDTO());
 
-            return CreatedAtAction("GetById", new { id = unit.Id }, unit.ToDTO());
+            return CreatedAtAction(nameof(GetById), new { id = unit.Id }, unit.ToDTO());
         }
 
         [HttpPut("{id}")]
