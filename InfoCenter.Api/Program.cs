@@ -1,4 +1,5 @@
 using InfoCenter.Api;
+using InfoCenter.Api.Data;
 using InfoCenter.Api.Interfaces;
 using InfoCenter.Api.Repository;
 
@@ -32,5 +33,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MigrateDb();
 
 app.Run();
