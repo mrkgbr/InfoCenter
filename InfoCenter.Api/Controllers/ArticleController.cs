@@ -20,11 +20,12 @@ namespace InfoCenter.Api.Controllers
         public async Task<IActionResult> GetAll()
         {
             var articles = await _articleRepository.GetAllAsync();
+            var articlesDTO = articles.Select(x => x.ToDTO());
 
-            return Ok(articles);
+            return Ok(articlesDTO);
         }
 
-        [HttpGet("{id}", Name = "ArticleGetById")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
             var article = await _articleRepository.GetByIdAsync(id);
@@ -40,11 +41,14 @@ namespace InfoCenter.Api.Controllers
         {
             var article = await _articleRepository.CreateAsync(articleDTO.ToModelFromCreateDTO());
 
-            return CreatedAtAction("ArticleGetById", new { id = article.Id }, article.ToDTO());
+            return CreatedAtAction(nameof(GetById), new { id = article.Id }, article.ToDTO());
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateArticleDTO articleDTO)
+        public async Task<IActionResult> Update(
+            [FromRoute] int id,
+            [FromBody] UpdateArticleDTO articleDTO
+        )
         {
             var article = await _articleRepository.UpdateAsync(id, articleDTO);
             if (article is null)
@@ -53,7 +57,7 @@ namespace InfoCenter.Api.Controllers
             return Ok(article.ToDTO());
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             var existingArticle = await _articleRepository.DeleteAsync(id);
