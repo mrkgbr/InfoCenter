@@ -2,6 +2,7 @@ using InfoCenter.Api.DTOs.Unit;
 using InfoCenter.Api.Interfaces;
 using InfoCenter.Api.Mappers;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace InfoCenter.Api.Controllers
 {
@@ -17,6 +18,7 @@ namespace InfoCenter.Api.Controllers
         }
 
         [HttpGet]
+        [SwaggerOperation(Summary = "Returns all the units in the system")]
         public async Task<IActionResult> GetAll()
         {
             var units = await _unitRepository.GetAllAsync();
@@ -26,6 +28,7 @@ namespace InfoCenter.Api.Controllers
         }
 
         [HttpGet("{id}")]
+        [SwaggerOperation(Summary = "Returns a single unit by id")]
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
             var unit = await _unitRepository.GetByIdAsync(id);
@@ -36,6 +39,7 @@ namespace InfoCenter.Api.Controllers
         }
 
         [HttpPost]
+        [SwaggerOperation(Summary = "Creates a new unit in the system")]
         public async Task<IActionResult> Create([FromBody] CreateUnitDTO unitDTO)
         {
             var unit = await _unitRepository.CreateAsync(unitDTO.ToModelFromCreateDTO());
@@ -44,6 +48,7 @@ namespace InfoCenter.Api.Controllers
         }
 
         [HttpPut("{id}")]
+        [SwaggerOperation(Summary = "Updates an existing customer in the system")]
         public async Task<IActionResult> UpdateById(
             [FromRoute] int id,
             [FromBody] UpdateUnitDTO unitDTO
@@ -57,6 +62,7 @@ namespace InfoCenter.Api.Controllers
         }
 
         [HttpDelete("{id}")]
+        [SwaggerOperation(Summary = "Deletes a unit in the system")]
         public async Task<IActionResult> DeleteById([FromRoute] int id)
         {
             var existingUnit = await _unitRepository.DeleteAsync(id);
