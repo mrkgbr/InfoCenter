@@ -42,6 +42,9 @@ namespace InfoCenter.Api.Controllers
         [SwaggerOperation(Summary = "Creates a new unit in the system")]
         public async Task<IActionResult> Create([FromBody] CreateUnitDTO unitDTO)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             var unit = await _unitRepository.CreateAsync(unitDTO.ToModelFromCreateDTO());
 
             return CreatedAtAction(nameof(GetById), new { id = unit.Id }, unit.ToDTO());
@@ -54,6 +57,9 @@ namespace InfoCenter.Api.Controllers
             [FromBody] UpdateUnitDTO unitDTO
         )
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             var existingUnit = await _unitRepository.UpdateAsync(id, unitDTO);
             if (existingUnit is null)
                 return NotFound();
