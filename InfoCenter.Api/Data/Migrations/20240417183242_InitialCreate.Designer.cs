@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InfoCenter.Api.Data.Migrations
 {
     [DbContext(typeof(InfoCenterContext))]
-    [Migration("20240416092027_AddArticles")]
-    partial class AddArticles
+    [Migration("20240417183242_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
