@@ -39,6 +39,9 @@ namespace InfoCenter.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateArticleDTO articleDTO)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             var article = await _articleRepository.CreateAsync(articleDTO.ToModelFromCreateDTO());
 
             return CreatedAtAction(nameof(GetById), new { id = article.Id }, article.ToDTO());
@@ -50,6 +53,9 @@ namespace InfoCenter.Api.Controllers
             [FromBody] UpdateArticleDTO articleDTO
         )
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             var article = await _articleRepository.UpdateAsync(id, articleDTO);
             if (article is null)
                 return NotFound();

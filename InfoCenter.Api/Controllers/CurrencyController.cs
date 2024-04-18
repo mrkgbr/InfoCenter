@@ -38,6 +38,9 @@ namespace InfoCenter.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateCurrencyDTO currencyDTO)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             var currency = await _currencyRepository.CreateAsync(
                 currencyDTO.ToModelFromCreateDTO()
             );
@@ -51,6 +54,9 @@ namespace InfoCenter.Api.Controllers
             [FromBody] UpdateCurrencyDTO currencyDTO
         )
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             var currency = await _currencyRepository.UpdateAsync(id, currencyDTO);
             if (currency is null)
                 return NotFound();
