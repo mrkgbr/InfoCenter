@@ -23,8 +23,8 @@ dotnet build
 dotnet run
 ```
 
-## Work in progress
+# Work in progress
 
-# TODO
+## TODO
 
 - Implement missing models and logic for them
