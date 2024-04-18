@@ -12,7 +12,10 @@ namespace InfoCenter.Api.Controllers
         private readonly IArticleRepository _articleRepository;
         private readonly IUnitRepository _unitRepository;
 
-        public ArticleController(IArticleRepository articleRepository, IUnitRepository unitRepository)
+        public ArticleController(
+            IArticleRepository articleRepository,
+            IUnitRepository unitRepository
+        )
         {
             _articleRepository = articleRepository;
             _unitRepository = unitRepository;
@@ -39,15 +42,20 @@ namespace InfoCenter.Api.Controllers
         }
 
         [HttpPost("{unitId}")]
-        public async Task<IActionResult> Create([FromRoute] int unitId ,[FromBody] CreateArticleDTO articleDTO)
+        public async Task<IActionResult> Create(
+            [FromRoute] int unitId,
+            [FromBody] CreateArticleDTO articleDTO
+        )
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if(!await _unitRepository.UnitExistsAsync(unitId))
+            if (!await _unitRepository.UnitExistsAsync(unitId))
                 return BadRequest("Unit does not exist");
 
-            var article = await _articleRepository.CreateAsync(articleDTO.ToModelFromCreateDTO(unitId));
+            var article = await _articleRepository.CreateAsync(
+                articleDTO.ToModelFromCreateDTO(unitId)
+            );
 
             return CreatedAtAction(nameof(GetById), new { id = article.Id }, article.ToDTO());
         }
@@ -60,6 +68,9 @@ namespace InfoCenter.Api.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+
+            if (!await _unitRepository.UnitExistsAsync(articleDTO.UnitId))
+                return BadRequest("Unit does not exist");
 
             var article = await _articleRepository.UpdateAsync(id, articleDTO);
             if (article is null)
