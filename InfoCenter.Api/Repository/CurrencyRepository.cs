@@ -16,7 +16,6 @@ namespace InfoCenter.Api.Repository
 
         public async Task<Currency> CreateAsync(Currency currencyModel)
         {
-            currencyModel.IsActive = true;
             await _context.Currencies.AddAsync(currencyModel);
             await _context.SaveChangesAsync();
 

@@ -10,5 +10,6 @@ namespace InfoCenter.Api.Interfaces
         Task<Unit> CreateAsync(Unit unitModel);
         Task<Unit?> UpdateAsync(int id, UpdateUnitDTO unitDTO);
         Task<Unit?> DeleteAsync(int id);
+        Task<bool> UnitExistsAsync(int id);
     }
 }

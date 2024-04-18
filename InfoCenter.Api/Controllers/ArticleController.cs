@@ -10,10 +10,12 @@ namespace InfoCenter.Api.Controllers
     public class ArticleController : ControllerBase
     {
         private readonly IArticleRepository _articleRepository;
+        private readonly IUnitRepository _unitRepository;
 
-        public ArticleController(IArticleRepository articleRepository)
+        public ArticleController(IArticleRepository articleRepository, IUnitRepository unitRepository)
         {
             _articleRepository = articleRepository;
+            _unitRepository = unitRepository;
         }
 
         [HttpGet]
@@ -36,13 +38,16 @@ namespace InfoCenter.Api.Controllers
             return Ok(article.ToDTO());
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateArticleDTO articleDTO)
+        [HttpPost("{unitId}")]
+        public async Task<IActionResult> Create([FromRoute] int unitId ,[FromBody] CreateArticleDTO articleDTO)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var article = await _articleRepository.CreateAsync(articleDTO.ToModelFromCreateDTO());
+            if(!await _unitRepository.UnitExistsAsync(unitId))
+                return BadRequest("Unit does not exist");
+
+            var article = await _articleRepository.CreateAsync(articleDTO.ToModelFromCreateDTO(unitId));
 
             return CreatedAtAction(nameof(GetById), new { id = article.Id }, article.ToDTO());
         }

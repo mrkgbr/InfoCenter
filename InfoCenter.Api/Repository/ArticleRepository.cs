@@ -14,7 +14,6 @@ namespace InfoCenter.Api.Repository
         }
         public async Task<Article> CreateAsync(Article articleModel)
         {
-            articleModel.IsActive = true;
             await _context.Articles.AddAsync(articleModel);
             await _context.SaveChangesAsync();
 
@@ -53,6 +52,7 @@ namespace InfoCenter.Api.Repository
             existingArticle.Name = articleDTO.Name;
             existingArticle.Description = articleDTO.Description;
             existingArticle.IsActive = articleDTO.IsActive;
+            existingArticle.UnitId = articleDTO.UnitId;
 
             await _context.SaveChangesAsync();
 

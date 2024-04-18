@@ -6,7 +6,7 @@ public class Article
     public string SapNumber { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
     public string? Description { get; set; }
-    public bool IsActive { get; set; }
+    public bool IsActive { get; set; } = true;
     public int UnitId { get; set; }
     public Unit? Unit { get; set; }
 }

@@ -14,7 +14,6 @@ namespace InfoCenter.Api.Repository
         }
         public async Task<Unit> CreateAsync(Unit unitModel)
         {
-            unitModel.IsActive = true; // default is true when created
             await _context.Units.AddAsync(unitModel);
             await _context.SaveChangesAsync();
 
@@ -41,6 +40,11 @@ namespace InfoCenter.Api.Repository
         public async Task<Unit?> GetByIdAsync(int id)
         {
             return await _context.Units.FindAsync(id);
+        }
+
+        public async Task<bool> UnitExistsAsync(int id)
+        {
+            return await _context.Units.AnyAsync(unit => unit.Id == id);
         }
 
         public async Task<Unit?> UpdateAsync(int id, UpdateUnitDTO unitDTO)

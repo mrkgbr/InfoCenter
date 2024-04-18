@@ -14,8 +14,5 @@ namespace InfoCenter.Api.DTOs.Article
 
         [MaxLength(150, ErrorMessage = "Sap Number cannot be longer than 150 characters")]
         public string? Description { get; set; }
-
-        [Required]
-        public int UnitId { get; set; }
     }
 }
