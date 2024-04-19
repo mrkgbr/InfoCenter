@@ -28,3 +28,5 @@ dotnet run
 ## TODO
 
 - Implement missing models and logic for them
+- Format user inputs
+- Set unique properties
