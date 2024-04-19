@@ -11,10 +11,12 @@ namespace InfoCenter.Api.Controllers
     public class UnitController : ControllerBase
     {
         private readonly IUnitRepository _unitRepository;
+        private readonly IArticleRepository _articleRepository;
 
-        public UnitController(IUnitRepository unitRepository)
+        public UnitController(IUnitRepository unitRepository, IArticleRepository articleRepository)
         {
             _unitRepository = unitRepository;
+            _articleRepository = articleRepository;
         }
 
         [HttpGet]
@@ -71,6 +73,9 @@ namespace InfoCenter.Api.Controllers
         [SwaggerOperation(Summary = "Deletes a unit in the system")]
         public async Task<IActionResult> DeleteById([FromRoute] int id)
         {
+            if (await _articleRepository.ArticleHasUnitReferenceAsync(id))
+                return BadRequest("Unit has Article reference");
+
             var existingUnit = await _unitRepository.DeleteAsync(id);
             if (existingUnit is null)
                 return NotFound();
