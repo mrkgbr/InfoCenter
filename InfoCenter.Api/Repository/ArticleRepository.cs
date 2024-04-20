@@ -64,7 +64,9 @@ namespace InfoCenter.Api.Repository
                 }
             }
 
-            return await articles.ToListAsync();
+            var skipNumber = (query.PageNumber - 1) * query.PageSize;
+
+            return await articles.Skip(skipNumber).Take(query.PageSize).ToListAsync();
         }
 
         public async Task<Article?> GetByIdAsync(int id)
