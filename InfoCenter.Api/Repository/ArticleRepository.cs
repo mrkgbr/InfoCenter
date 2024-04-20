@@ -9,6 +9,7 @@ namespace InfoCenter.Api.Repository
     public class ArticleRepository : IArticleRepository
     {
         private readonly InfoCenterContext _context;
+
         public ArticleRepository(InfoCenterContext context)
         {
             _context = context;
@@ -51,6 +52,16 @@ namespace InfoCenter.Api.Repository
             if (!string.IsNullOrWhiteSpace(query.Name))
             {
                 articles = articles.Where(a => a.Name.Contains(query.Name));
+            }
+
+            if (!string.IsNullOrWhiteSpace(query.SortBy))
+            {
+                if (query.SortBy.Equals("SapNumber", StringComparison.OrdinalIgnoreCase))
+                {
+                    articles = query.IsDescending
+                        ? articles.OrderByDescending(a => a.SapNumber)
+                        : articles.OrderBy(a => a.SapNumber);
+                }
             }
 
             return await articles.ToListAsync();
