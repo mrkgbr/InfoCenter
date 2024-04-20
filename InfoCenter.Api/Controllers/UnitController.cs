@@ -2,6 +2,7 @@ using InfoCenter.Api.DTOs.Unit;
 using InfoCenter.Api.Interfaces;
 using InfoCenter.Api.Mappers;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace InfoCenter.Api.Controllers
@@ -73,14 +74,20 @@ namespace InfoCenter.Api.Controllers
         [SwaggerOperation(Summary = "Deletes a unit in the system")]
         public async Task<IActionResult> DeleteById([FromRoute] int id)
         {
-            if (await _articleRepository.ArticleHasUnitReferenceAsync(id))
+            try
+            {
+                var existingUnit = await _unitRepository.DeleteAsync(id);
+                if (existingUnit is null)
+                    return NotFound();
+
+                return NoContent();
+            }
+            catch (DbUpdateException)
+            {
                 return BadRequest("Unit has Article reference");
-
-            var existingUnit = await _unitRepository.DeleteAsync(id);
-            if (existingUnit is null)
-                return NotFound();
-
-            return NoContent();
+            }
+            // if (await _articleRepository.ArticleHasUnitReferenceAsync(id))
+            //     return BadRequest("Unit has Article reference");
         }
     }
 }
