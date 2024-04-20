@@ -123,12 +123,17 @@ namespace InfoCenter.Api.Data.Migrations
             modelBuilder.Entity("InfoCenter.Api.Models.Article", b =>
                 {
                     b.HasOne("InfoCenter.Api.Models.Unit", "Unit")
-                        .WithMany()
+                        .WithMany("Articles")
                         .HasForeignKey("UnitId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Unit");
+                });
+
+            modelBuilder.Entity("InfoCenter.Api.Models.Unit", b =>
+                {
+                    b.Navigation("Articles");
                 });
 #pragma warning restore 612, 618
         }

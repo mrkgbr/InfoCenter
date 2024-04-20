@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InfoCenter.Api.Data.Migrations
 {
     [DbContext(typeof(InfoCenterContext))]
-    [Migration("20240418085311_UpdateIsActive")]
-    partial class UpdateIsActive
+    [Migration("20240420081218_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -126,12 +126,17 @@ namespace InfoCenter.Api.Data.Migrations
             modelBuilder.Entity("InfoCenter.Api.Models.Article", b =>
                 {
                     b.HasOne("InfoCenter.Api.Models.Unit", "Unit")
-                        .WithMany()
+                        .WithMany("Articles")
                         .HasForeignKey("UnitId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Unit");
+                });
+
+            modelBuilder.Entity("InfoCenter.Api.Models.Unit", b =>
+                {
+                    b.Navigation("Articles");
                 });
 #pragma warning restore 612, 618
         }

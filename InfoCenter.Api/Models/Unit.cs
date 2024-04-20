@@ -6,4 +6,6 @@ public class Unit
     public string Name { get; set; } = string.Empty;
     public string? Description { get; set; }
     public bool IsActive { get; set; } = true;
+
+    public virtual IList<Article> Articles { get; set; } = [];
 }
