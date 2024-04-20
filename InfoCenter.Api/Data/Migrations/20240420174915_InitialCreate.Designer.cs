@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InfoCenter.Api.Data.Migrations
 {
     [DbContext(typeof(InfoCenterContext))]
-    [Migration("20240420093602_UpdateDeleteBehavior")]
-    partial class UpdateDeleteBehavior
+    [Migration("20240420174915_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -119,6 +119,9 @@ namespace InfoCenter.Api.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("Units");
                 });

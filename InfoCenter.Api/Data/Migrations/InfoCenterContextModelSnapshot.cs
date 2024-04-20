@@ -117,6 +117,9 @@ namespace InfoCenter.Api.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Name")
+                        .IsUnique();
+
                     b.ToTable("Units");
                 });
 

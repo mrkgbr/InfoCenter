@@ -13,5 +13,5 @@ public class Article
 
     public int UnitId { get; set; }
     [DeleteBehavior(DeleteBehavior.Restrict)]
-    public virtual Unit? Unit { get; set; }
+    public virtual Unit Unit { get; set; } = null!;
 }

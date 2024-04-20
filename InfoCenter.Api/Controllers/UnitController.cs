@@ -48,9 +48,16 @@ namespace InfoCenter.Api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var unit = await _unitRepository.CreateAsync(unitDTO.ToModelFromCreateDTO());
+            try
+            {
+                var unit = await _unitRepository.CreateAsync(unitDTO.ToModelFromCreateDTO());
 
-            return CreatedAtAction(nameof(GetById), new { id = unit.Id }, unit.ToDTO());
+                return CreatedAtAction(nameof(GetById), new { id = unit.Id }, unit.ToDTO());
+            }
+            catch (DbUpdateException ex)
+            {
+                return BadRequest(ex.InnerException?.Message);
+            }
         }
 
         [HttpPut("{id}")]

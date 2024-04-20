@@ -79,13 +79,19 @@ namespace InfoCenter.Api.Data.Migrations
                         column: x => x.UnitId,
                         principalTable: "Units",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Articles_UnitId",
                 table: "Articles",
                 column: "UnitId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Units_Name",
+                table: "Units",
+                column: "Name",
+                unique: true);
         }
 
         /// <inheritdoc />

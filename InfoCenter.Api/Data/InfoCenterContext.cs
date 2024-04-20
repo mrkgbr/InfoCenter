@@ -14,10 +14,16 @@ public class InfoCenterContext(DbContextOptions<InfoCenterContext> options) : Db
     // protected override void OnModelCreating(ModelBuilder modelBuilder)
     // {
     //     modelBuilder
+    //         .Entity<Unit>()
+    //         .HasIndex(u => u.Name)
+    //         .IsUnique();
+
+    //     modelBuilder
     //         .Entity<Article>()
     //         .HasOne(u => u.Unit)
     //         .WithMany(a => a.Articles)
-    //         .HasForeignKey(a => a.UnitId)
+    //         .HasForeignKey(u => u.UnitId)
+    //         .IsRequired()
     //         .OnDelete(DeleteBehavior.Restrict); // Prevent cascade delete
     // }
 }

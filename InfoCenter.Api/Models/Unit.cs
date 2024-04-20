@@ -1,5 +1,8 @@
-﻿namespace InfoCenter.Api.Models;
+﻿using Microsoft.EntityFrameworkCore;
 
+namespace InfoCenter.Api.Models;
+
+[Index(nameof(Name), IsUnique = true)]
 public class Unit
 {
     public int Id { get; set; }
@@ -7,5 +10,5 @@ public class Unit
     public string? Description { get; set; }
     public bool IsActive { get; set; } = true;
 
-    public virtual IList<Article> Articles { get; set; } = [];
+    public virtual ICollection<Article> Articles { get; set; } = new List<Article>();
 }
