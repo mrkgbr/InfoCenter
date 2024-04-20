@@ -1,4 +1,5 @@
 using InfoCenter.Api.DTOs.Article;
+using InfoCenter.Api.Helpers;
 using InfoCenter.Api.Interfaces;
 using InfoCenter.Api.Mappers;
 using Microsoft.AspNetCore.Mvc;
@@ -22,9 +23,9 @@ namespace InfoCenter.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] QueryObject query)
         {
-            var articles = await _articleRepository.GetAllAsync();
+            var articles = await _articleRepository.GetAllAsync(query);
             var articlesDTO = articles.Select(x => x.ToDTO());
 
             return Ok(articlesDTO);

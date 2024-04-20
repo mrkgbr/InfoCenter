@@ -1,4 +1,5 @@
 using InfoCenter.Api.DTOs.Article;
+using InfoCenter.Api.Helpers;
 using InfoCenter.Api.Interfaces;
 using InfoCenter.Api.Models;
 using Microsoft.EntityFrameworkCore;
@@ -38,9 +39,21 @@ namespace InfoCenter.Api.Repository
             return existingArticle;
         }
 
-        public async Task<List<Article>> GetAllAsync()
+        public async Task<List<Article>> GetAllAsync(QueryObject query)
         {
-            return await _context.Articles.ToListAsync();
+            var articles = _context.Articles.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(query.SapNumber))
+            {
+                articles = articles.Where(a => a.SapNumber.Contains(query.SapNumber));
+            }
+
+            if (!string.IsNullOrWhiteSpace(query.Name))
+            {
+                articles = articles.Where(a => a.Name.Contains(query.Name));
+            }
+
+            return await articles.ToListAsync();
         }
 
         public async Task<Article?> GetByIdAsync(int id)
