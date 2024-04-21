@@ -10,6 +10,7 @@ public class InfoCenterContext(DbContextOptions<InfoCenterContext> options) : Db
     public DbSet<Currency> Currencies { get; set; }
     public DbSet<Unit> Units { get; set; }
     public DbSet<Article> Articles { get; set; }
+    public DbSet<ArticleDetail> ArticleDetails { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
