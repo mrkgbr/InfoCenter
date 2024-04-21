@@ -45,20 +45,19 @@ namespace InfoCenter.Api.Controllers
             return Ok(article.ToDTO());
         }
 
-        [HttpPost("{unitId}")]
+        [HttpPost]
         public async Task<IActionResult> Create(
-            [FromRoute] int unitId,
             [FromBody] CreateArticleDTO articleDTO
         )
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (!await _unitRepository.UnitExistsAsync(unitId))
+            if (!await _unitRepository.UnitExistsAsync(articleDTO.UnitId))
                 return BadRequest("Unit does not exist");
 
             var article = await _articleRepository.CreateAsync(
-                articleDTO.ToModelFromCreateDTO(unitId)
+                articleDTO.ToModelFromCreateDTO()
             );
 
             return CreatedAtAction(nameof(GetById), new { id = article.Id }, article.ToDTO());

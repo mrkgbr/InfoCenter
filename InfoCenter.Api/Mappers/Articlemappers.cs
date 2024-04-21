@@ -18,14 +18,14 @@ namespace InfoCenter.Api.Mappers
             };
         }
 
-        public static Article ToModelFromCreateDTO(this CreateArticleDTO articleDTO, int unitId)
+        public static Article ToModelFromCreateDTO(this CreateArticleDTO articleDTO)
         {
             return new Article
             {
                 SapNumber = articleDTO.SapNumber,
                 Name = articleDTO.Name,
                 Description = articleDTO.Description,
-                UnitId = unitId
+                UnitId = articleDTO.UnitId
             };
         }
     }
