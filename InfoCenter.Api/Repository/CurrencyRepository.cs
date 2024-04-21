@@ -42,11 +42,7 @@ namespace InfoCenter.Api.Repository
 
         public async Task<Currency?> GetByIdAsync(int id)
         {
-            var existingCurrency = await _context.Currencies.FindAsync(id);
-            if (existingCurrency is null)
-                return null;
-
-            return existingCurrency;
+            return await _context.Currencies.FindAsync(id);
         }
 
         public async Task<Currency?> UpdateAsync(int id, UpdateCurrencyDTO currencyDTO)

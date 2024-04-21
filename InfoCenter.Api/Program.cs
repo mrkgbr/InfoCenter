@@ -17,6 +17,7 @@ builder.Services.AddSwaggerGen(c => {
 builder.Services.AddScoped<IUnitRepository, UnitRepository>();
 builder.Services.AddScoped<IArticleRepository, ArticleRepository>();
 builder.Services.AddScoped<ICurrencyRepository, CurrencyRepository>();
+builder.Services.AddScoped<IContractRepository, ContractRepository>();
 
 var app = builder.Build();
 

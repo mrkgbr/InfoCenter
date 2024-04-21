@@ -83,18 +83,19 @@ namespace InfoCenter.Api.Controllers
         {
             try
             {
+                if (await _articleRepository.ArticleHasUnitReferenceAsync(id))
+                    return BadRequest("Some Article has Unit reference, cannot delete");
+
                 var existingUnit = await _unitRepository.DeleteAsync(id);
                 if (existingUnit is null)
                     return NotFound();
 
                 return NoContent();
             }
-            catch (DbUpdateException)
+            catch (DbUpdateException ex)
             {
-                return BadRequest("Unit has Article reference");
+                return BadRequest(ex.InnerException?.Message ?? "Something went wrong");
             }
-            // if (await _articleRepository.ArticleHasUnitReferenceAsync(id))
-            //     return BadRequest("Unit has Article reference");
         }
     }
 }

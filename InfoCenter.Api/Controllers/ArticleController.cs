@@ -77,7 +77,7 @@ namespace InfoCenter.Api.Controllers
             if (article is null)
                 return NotFound();
 
-            return Ok(article.ToDTO());
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
