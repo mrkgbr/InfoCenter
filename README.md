@@ -28,6 +28,7 @@ dotnet run
 ## TODO
 
 - Implement other models and logic (ArticleDetails)
+- Add QueryObject (filtering, sorting)
 - Format user inputs ToUpper in some cases
 - Check unique prop if already exist
 - Prevent delete relational models is it has associated key
