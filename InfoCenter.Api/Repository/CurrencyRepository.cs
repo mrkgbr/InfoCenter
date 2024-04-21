@@ -23,6 +23,11 @@ namespace InfoCenter.Api.Repository
             return currencyModel;
         }
 
+        public async Task<bool> CurrencyExistAsync(int id)
+        {
+            return await _context.Currencies.AnyAsync(c => c.Id == id);
+        }
+
         public async Task<Currency?> DeleteAsync(int id)
         {
             var existingCurrency = await _context.Currencies.FindAsync(id);

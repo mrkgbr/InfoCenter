@@ -5,8 +5,6 @@ public class ArticleDetail
     public int Id { get; set; }
 
     public decimal Price { get; set; } = 0;
-    public DateOnly StartDate { get; set; }
-    public DateOnly EndDate { get; set; }
     public bool IsActive { get; set; } = true;
 
     public int ArticleId { get; set; }

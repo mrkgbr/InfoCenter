@@ -10,10 +10,12 @@ namespace InfoCenter.Api.Controllers
     public class CurrencyController : ControllerBase
     {
         private readonly ICurrencyRepository _currencyRepository;
+        private readonly IArticleDetailRepository _articleDetailRepository;
 
-        public CurrencyController(ICurrencyRepository currencyRepository)
+        public CurrencyController(ICurrencyRepository currencyRepository, IArticleDetailRepository articleDetailRepository)
         {
             _currencyRepository = currencyRepository;
+            _articleDetailRepository = articleDetailRepository;
         }
 
         [HttpGet]
@@ -67,6 +69,9 @@ namespace InfoCenter.Api.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
+            if (await _articleDetailRepository.HasCurrencyReference(id))
+                return BadRequest("Some Article Detail has Currency reference, cannot delete");
+
             var currency = await _currencyRepository.DeleteAsync(id);
             if (currency is null)
                 return NotFound();

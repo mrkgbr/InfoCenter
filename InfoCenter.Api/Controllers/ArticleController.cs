@@ -12,14 +12,17 @@ namespace InfoCenter.Api.Controllers
     {
         private readonly IArticleRepository _articleRepository;
         private readonly IUnitRepository _unitRepository;
+        private readonly IArticleDetailRepository _articleDetailRepository;
 
         public ArticleController(
             IArticleRepository articleRepository,
-            IUnitRepository unitRepository
+            IUnitRepository unitRepository,
+            IArticleDetailRepository articleDetailRepository
         )
         {
             _articleRepository = articleRepository;
             _unitRepository = unitRepository;
+            _articleDetailRepository = articleDetailRepository;
         }
 
         [HttpGet]
@@ -83,6 +86,9 @@ namespace InfoCenter.Api.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
+            if (await _articleDetailRepository.HasArticleReference(id))
+                return BadRequest("Some Article Detail has Article reference, cannot delete");
+
             var existingArticle = await _articleRepository.DeleteAsync(id);
             if (existingArticle is null)
                 return NotFound();

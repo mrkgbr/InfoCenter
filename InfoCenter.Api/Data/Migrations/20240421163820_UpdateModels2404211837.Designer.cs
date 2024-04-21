@@ -3,6 +3,7 @@ using System;
 using InfoCenter.Api.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InfoCenter.Api.Data.Migrations
 {
     [DbContext(typeof(InfoCenterContext))]
-    partial class InfoCenterContextModelSnapshot : ModelSnapshot
+    [Migration("20240421163820_UpdateModels2404211837")]
+    partial class UpdateModels2404211837
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.4");

@@ -83,7 +83,7 @@ namespace InfoCenter.Api.Controllers
         {
             try
             {
-                if (await _articleRepository.ArticleHasUnitReferenceAsync(id))
+                if (await _articleRepository.HasUnitReferenceAsync(id))
                     return BadRequest("Some Article has Unit reference, cannot delete");
 
                 var existingUnit = await _unitRepository.DeleteAsync(id);

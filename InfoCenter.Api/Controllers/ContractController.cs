@@ -10,10 +10,15 @@ namespace InfoCenter.Api.Controllers
     public class ContractController : ControllerBase
     {
         private readonly IContractRepository _contractRepo;
+        private readonly IArticleDetailRepository _articleDetailRepository;
 
-        public ContractController(IContractRepository contractRepo)
+        public ContractController(
+            IContractRepository contractRepo,
+            IArticleDetailRepository articleDetailRepository
+        )
         {
             _contractRepo = contractRepo;
+            _articleDetailRepository = articleDetailRepository;
         }
 
         [HttpGet]
@@ -36,7 +41,7 @@ namespace InfoCenter.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(CreateContractDTO contractDTO)
+        public async Task<IActionResult> Create([FromBody] CreateContractDTO contractDTO)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -47,7 +52,10 @@ namespace InfoCenter.Api.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update([FromRoute] int id, UpdateContractDTO updateDTO)
+        public async Task<IActionResult> Update(
+            [FromRoute] int id,
+            [FromBody] UpdateContractDTO updateDTO
+        )
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -62,6 +70,9 @@ namespace InfoCenter.Api.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
+            if (await _articleDetailRepository.HasContractReference(id))
+                return BadRequest("Some Article Detail has Contract reference, cannot delete");
+
             var contract = await _contractRepo.DeleteAsync(id);
             if (contract is null)
                 return NotFound();

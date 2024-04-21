@@ -16,7 +16,12 @@ namespace InfoCenter.Api.Repository
             _context = context;
         }
 
-        public async Task<bool> ArticleHasUnitReferenceAsync(int id)
+        public async Task<bool> ArticleExistAsync(int id)
+        {
+            return await _context.Articles.AnyAsync(a => a.Id == id);
+        }
+
+        public async Task<bool> HasUnitReferenceAsync(int id)
         {
             return await _context.Articles.AnyAsync(article => article.UnitId == id);
         }

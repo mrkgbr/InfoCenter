@@ -11,4 +11,5 @@ public interface IContractRepository
     Task<Contract> CreateAsync(Contract contractModel);
     Task<Contract?> UpdateAsync(int id, UpdateContractDTO contractDTO);
     Task<Contract?> DeleteAsync(int id);
+    Task<bool> ContractExistAsync(int id);
 }

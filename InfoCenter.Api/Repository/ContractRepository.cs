@@ -15,6 +15,11 @@ public class ContractRepository : IContractRepository
         _context = context;
     }
 
+    public async Task<bool> ContractExistAsync(int id)
+    {
+        return await _context.Contracts.AnyAsync(c => c.Id == id);
+    }
+
     public async Task<Contract> CreateAsync(Contract contractModel)
     {
         await _context.Contracts.AddAsync(contractModel);
