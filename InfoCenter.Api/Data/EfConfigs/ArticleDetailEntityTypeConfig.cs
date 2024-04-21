@@ -30,7 +30,9 @@ public class ArticleDetailEntityTypeConfig : IEntityTypeConfiguration<ArticleDet
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.Property(ad => ad.Price).IsRequired();
+
         builder.Property(ad => ad.StartDate).IsRequired();
+
         builder.Property(ad => ad.EndDate).IsRequired();
     }
 }
