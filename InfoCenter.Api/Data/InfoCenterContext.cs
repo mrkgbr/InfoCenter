@@ -17,6 +17,7 @@ public class InfoCenterContext(DbContextOptions<InfoCenterContext> options) : Db
         new UnitEntityTypeConfig().Configure(modelBuilder.Entity<Unit>());
         new ArticleEntityTypeConfig().Configure(modelBuilder.Entity<Article>());
         new CurrencyEntityTypeConfig().Configure(modelBuilder.Entity<Currency>());
+        new ContractEntityTypeConfig().Configure(modelBuilder.Entity<Contract>());
         new ArticleDetailEntityTypeConfig().Configure(modelBuilder.Entity<ArticleDetail>());
     }
 }
