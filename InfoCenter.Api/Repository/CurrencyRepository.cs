@@ -1,3 +1,4 @@
+using InfoCenter.Api.Data;
 using InfoCenter.Api.DTOs.Currency;
 using InfoCenter.Api.Interfaces;
 using InfoCenter.Api.Models;

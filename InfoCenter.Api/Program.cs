@@ -1,4 +1,3 @@
-using InfoCenter.Api;
 using InfoCenter.Api.Data;
 using InfoCenter.Api.Interfaces;
 using InfoCenter.Api.Repository;

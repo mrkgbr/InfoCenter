@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace InfoCenter.Api.Models;
+﻿namespace InfoCenter.Api.Models;
 
 public class Article
 {
@@ -12,6 +10,7 @@ public class Article
     public bool IsActive { get; set; } = true;
 
     public int UnitId { get; set; }
-    [DeleteBehavior(DeleteBehavior.Restrict)]
-    public virtual Unit Unit { get; set; } = null!;
+    public Unit Unit { get; set; } = null!;
+
+    public ICollection<ArticleDetail> ArticleDetails { get; } = new List<ArticleDetail>();
 }

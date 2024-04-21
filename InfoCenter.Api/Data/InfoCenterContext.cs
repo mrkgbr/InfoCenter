@@ -1,7 +1,8 @@
-﻿using InfoCenter.Api.Models;
+﻿using InfoCenter.Api.Data.EfConfigs;
+using InfoCenter.Api.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace InfoCenter.Api;
+namespace InfoCenter.Api.Data;
 
 public class InfoCenterContext(DbContextOptions<InfoCenterContext> options) : DbContext(options)
 {
@@ -10,20 +11,11 @@ public class InfoCenterContext(DbContextOptions<InfoCenterContext> options) : Db
     public DbSet<Unit> Units { get; set; }
     public DbSet<Article> Articles { get; set; }
 
-    // Prevent delete using fluent API
-    // protected override void OnModelCreating(ModelBuilder modelBuilder)
-    // {
-    //     modelBuilder
-    //         .Entity<Unit>()
-    //         .HasIndex(u => u.Name)
-    //         .IsUnique();
-
-    //     modelBuilder
-    //         .Entity<Article>()
-    //         .HasOne(u => u.Unit)
-    //         .WithMany(a => a.Articles)
-    //         .HasForeignKey(u => u.UnitId)
-    //         .IsRequired()
-    //         .OnDelete(DeleteBehavior.Restrict); // Prevent cascade delete
-    // }
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        new UnitEntityTypeConfig().Configure(modelBuilder.Entity<Unit>());
+        new ArticleEntityTypeConfig().Configure(modelBuilder.Entity<Article>());
+        new CurrencyEntityTypeConfig().Configure(modelBuilder.Entity<Currency>());
+        new ArticleDetailEntityTypeConfig().Configure(modelBuilder.Entity<ArticleDetail>());
+    }
 }
