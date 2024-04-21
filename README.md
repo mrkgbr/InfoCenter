@@ -27,6 +27,8 @@ dotnet run
 
 ## TODO
 
-- Implement missing models and logic for them
-- Format user inputs
-- Set unique properties
+- Implement other models and logic (ArticleDetails)
+- Format user inputs ToUpper in some cases
+- Check unique prop if already exist
+- Prevent delete relational models is it has associated key
+- Add authentication
