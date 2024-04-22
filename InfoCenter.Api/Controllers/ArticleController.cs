@@ -49,16 +49,11 @@ namespace InfoCenter.Api.Controllers
         [Route("Summary/{id}")]
         public async Task<IActionResult> GetByIdSummary([FromRoute] int id)
         {
-            var article = await _articleRepository.GetByIdAsync(id);
+            var article = await _articleRepository.GetByIdSummaryAsync(id);
             if (article is null)
                 return NotFound();
 
-            var unit = await _unitRepository.GetByIdAsync(article.UnitId);
-            if (unit is null)
-                return NotFound();
-
-
-            return Ok(article.ToSummaryDTO(unit.Name));
+            return Ok(article.ToSummaryDTO());
         }
 
         [HttpPost]

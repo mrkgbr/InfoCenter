@@ -29,7 +29,7 @@ namespace InfoCenter.Api.Mappers
             };
         }
 
-        public static ArticleSummaryDTO ToSummaryDTO(this Article articleModel, string unit)
+        public static ArticleSummaryDTO ToSummaryDTO(this Article articleModel)
         {
             return new ArticleSummaryDTO
             {
@@ -38,7 +38,7 @@ namespace InfoCenter.Api.Mappers
                 Name = articleModel.Name,
                 Description = articleModel.Description,
                 IsActive = articleModel.IsActive,
-                Unit = unit
+                Unit = articleModel.Unit.Name
             };
         }
     }

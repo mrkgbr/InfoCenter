@@ -96,5 +96,12 @@ namespace InfoCenter.Api.Repository
 
             return existingArticle;
         }
+
+        public async Task<Article?> GetByIdSummaryAsync(int id)
+        {
+            return await _context
+                .Articles.Include(a => a.Unit)
+                .FirstOrDefaultAsync(a => a.Id == id);
+        }
     }
 }
