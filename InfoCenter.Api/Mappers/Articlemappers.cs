@@ -28,5 +28,18 @@ namespace InfoCenter.Api.Mappers
                 UnitId = articleDTO.UnitId
             };
         }
+
+        public static ArticleSummaryDTO ToSummaryDTO(this Article articleModel, string unit)
+        {
+            return new ArticleSummaryDTO
+            {
+                Id = articleModel.Id,
+                SapNumber = articleModel.SapNumber,
+                Name = articleModel.Name,
+                Description = articleModel.Description,
+                IsActive = articleModel.IsActive,
+                Unit = unit
+            };
+        }
     }
 }

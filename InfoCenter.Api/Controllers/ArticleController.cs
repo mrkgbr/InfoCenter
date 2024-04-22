@@ -45,10 +45,24 @@ namespace InfoCenter.Api.Controllers
             return Ok(article.ToDTO());
         }
 
+        [HttpGet]
+        [Route("Summary/{id}")]
+        public async Task<IActionResult> GetByIdSummary([FromRoute] int id)
+        {
+            var article = await _articleRepository.GetByIdAsync(id);
+            if (article is null)
+                return NotFound();
+
+            var unit = await _unitRepository.GetByIdAsync(article.UnitId);
+            if (unit is null)
+                return NotFound();
+
+
+            return Ok(article.ToSummaryDTO(unit.Name));
+        }
+
         [HttpPost]
-        public async Task<IActionResult> Create(
-            [FromBody] CreateArticleDTO articleDTO
-        )
+        public async Task<IActionResult> Create([FromBody] CreateArticleDTO articleDTO)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -56,9 +70,7 @@ namespace InfoCenter.Api.Controllers
             if (!await _unitRepository.UnitExistsAsync(articleDTO.UnitId))
                 return BadRequest("Unit does not exist");
 
-            var article = await _articleRepository.CreateAsync(
-                articleDTO.ToModelFromCreateDTO()
-            );
+            var article = await _articleRepository.CreateAsync(articleDTO.ToModelFromCreateDTO());
 
             return CreatedAtAction(nameof(GetById), new { id = article.Id }, article.ToDTO());
         }
