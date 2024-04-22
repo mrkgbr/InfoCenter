@@ -2,6 +2,7 @@ using InfoCenter.Api.DTOs.Currency;
 using InfoCenter.Api.Interfaces;
 using InfoCenter.Api.Mappers;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace InfoCenter.Api.Controllers
 {
@@ -19,6 +20,7 @@ namespace InfoCenter.Api.Controllers
         }
 
         [HttpGet]
+        [SwaggerOperation(Summary = "Returns all Currencies.")]
         public async Task<IActionResult> GetAll()
         {
             var currencies = await _currencyRepository.GetAllAsync();
@@ -28,6 +30,7 @@ namespace InfoCenter.Api.Controllers
         }
 
         [HttpGet("{id}")]
+        [SwaggerOperation(Summary = "Returns a Currency with the specified ID.")]
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
             var currency = await _currencyRepository.GetByIdAsync(id);
@@ -38,6 +41,7 @@ namespace InfoCenter.Api.Controllers
         }
 
         [HttpPost]
+        [SwaggerOperation(Summary = "Creates a new Currency.")]
         public async Task<IActionResult> Create([FromBody] CreateCurrencyDTO currencyDTO)
         {
             if (!ModelState.IsValid)
@@ -51,6 +55,7 @@ namespace InfoCenter.Api.Controllers
         }
 
         [HttpPut("{id}")]
+        [SwaggerOperation(Summary = "Updates a Currency with the specified ID.")]
         public async Task<IActionResult> Update(
             [FromRoute] int id,
             [FromBody] UpdateCurrencyDTO currencyDTO
@@ -67,6 +72,7 @@ namespace InfoCenter.Api.Controllers
         }
 
         [HttpDelete("{id}")]
+        [SwaggerOperation(Summary = "Deletes a Currency with the specified ID.")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             if (await _articleDetailRepository.HasCurrencyReference(id))

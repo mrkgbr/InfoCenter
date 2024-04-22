@@ -8,7 +8,9 @@ public class CurrencyEntityTypeConfig : IEntityTypeConfiguration<Currency>
 {
     public void Configure(EntityTypeBuilder<Currency> builder)
     {
-        builder.Property(u => u.Name).IsRequired();
-        builder.HasIndex(u => u.Name).IsUnique();
+        builder.Property(c => c.Name).IsRequired();
+        builder.HasIndex(c => c.Name).IsUnique();
+
+        builder.Property(c => c.IsActive).IsRequired();
     }
 }

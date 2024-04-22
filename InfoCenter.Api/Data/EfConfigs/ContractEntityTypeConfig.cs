@@ -11,10 +11,12 @@ public class ContractEntityTypeConfig : IEntityTypeConfiguration<Contract>
         builder.HasIndex(c => c.ContractNumber).IsUnique();
         builder.Property(c => c.ContractNumber).HasMaxLength(10).IsRequired();
 
-        builder.Property(n => n.Name).IsRequired();
+        builder.Property(c => c.Name).IsRequired();
 
-        builder.Property(s => s.StartDate).IsRequired();
+        builder.Property(c => c.StartDate).IsRequired();
 
-        builder.Property(e => e.EndDate).IsRequired();
+        builder.Property(c => c.EndDate).IsRequired();
+
+        builder.Property(c => c.IsActive).IsRequired();
     }
 }

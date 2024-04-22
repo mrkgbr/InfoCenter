@@ -9,16 +9,16 @@ public class ArticleEntityTypeConfig : IEntityTypeConfiguration<Article>
     public void Configure(EntityTypeBuilder<Article> builder)
     {
         builder
-            .HasOne(u => u.Unit)
+            .HasOne(a => a.Unit)
             .WithMany(a => a.Articles)
-            .HasForeignKey(u => u.UnitId)
+            .HasForeignKey(a => a.UnitId)
             .IsRequired()
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.Property(u => u.SapNumber).HasMaxLength(10).IsRequired();
-        builder.HasIndex(u => u.SapNumber).IsUnique();
+        builder.Property(a => a.SapNumber).HasMaxLength(10).IsRequired();
+        builder.HasIndex(a => a.SapNumber).IsUnique();
 
-        builder.Property(u => u.Name).HasMaxLength(50).IsRequired();
-        builder.HasIndex(u => u.Name).IsUnique();
+        builder.Property(a => a.Name).HasMaxLength(50).IsRequired();
+        builder.HasIndex(a => a.Name).IsUnique();
     }
 }

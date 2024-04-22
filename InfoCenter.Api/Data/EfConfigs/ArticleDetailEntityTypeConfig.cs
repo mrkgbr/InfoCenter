@@ -10,25 +10,25 @@ public class ArticleDetailEntityTypeConfig : IEntityTypeConfiguration<ArticleDet
     {
         builder
             .HasOne(a => a.Article)
-            .WithMany(ad => ad.ArticleDetails)
+            .WithMany(a => a.ArticleDetails)
             .HasForeignKey(a => a.ArticleId)
             .IsRequired()
             .OnDelete(DeleteBehavior.Restrict);
 
         builder
-            .HasOne(c => c.Contract)
-            .WithMany(ad => ad.ArticleDetails)
-            .HasForeignKey(c => c.ContractId)
+            .HasOne(a => a.Contract)
+            .WithMany(a => a.ArticleDetails)
+            .HasForeignKey(a => a.ContractId)
             .IsRequired()
             .OnDelete(DeleteBehavior.Restrict);
 
         builder
-            .HasOne(c => c.Currency)
-            .WithMany(ad => ad.ArticleDetails)
-            .HasForeignKey(c => c.CurrencyId)
+            .HasOne(a => a.Currency)
+            .WithMany(a => a.ArticleDetails)
+            .HasForeignKey(a => a.CurrencyId)
             .IsRequired()
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.Property(ad => ad.Price).IsRequired();
+        builder.Property(a => a.Price).IsRequired();
     }
 }
