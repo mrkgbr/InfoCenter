@@ -50,6 +50,9 @@ namespace InfoCenter.Api.Controllers
 
             try
             {
+                if (await _unitRepository.IsUnitNameExistsAsync(unitDTO.Name))
+                    return BadRequest("Name must be unique.");
+
                 var unit = await _unitRepository.CreateAsync(unitDTO.ToModelFromCreateDTO());
 
                 return CreatedAtAction(nameof(GetById), new { id = unit.Id }, unit.ToDTO());
@@ -69,6 +72,9 @@ namespace InfoCenter.Api.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+
+            if (await _unitRepository.IsUnitNameExistsAsync(unitDTO.Name, id))
+                return BadRequest("Name must be unique.");
 
             var existingUnit = await _unitRepository.UpdateAsync(id, unitDTO);
             if (existingUnit is null)
@@ -94,7 +100,9 @@ namespace InfoCenter.Api.Controllers
             }
             catch (DbUpdateException ex)
             {
-                return BadRequest(ex.InnerException?.Message ?? "Something went wrong while saving data");
+                return BadRequest(
+                    ex.InnerException?.Message ?? "Something went wrong while saving data"
+                );
             }
         }
     }

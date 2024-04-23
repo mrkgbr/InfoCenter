@@ -9,10 +9,12 @@ namespace InfoCenter.Api.Repository
     public class UnitRepository : IUnitRepository
     {
         private readonly InfoCenterContext _context;
+
         public UnitRepository(InfoCenterContext context)
         {
             _context = context;
         }
+
         public async Task<Unit> CreateAsync(Unit unitModel)
         {
             await _context.Units.AddAsync(unitModel);
@@ -41,6 +43,16 @@ namespace InfoCenter.Api.Repository
         public async Task<Unit?> GetByIdAsync(int id)
         {
             return await _context.Units.FindAsync(id);
+        }
+
+        public async Task<bool> IsUnitNameExistsAsync(string name, int id = 0)
+        {
+            if (id == 0)
+                return await _context.Units.AnyAsync(u => u.Name.ToLower() == name.ToLower());
+            else
+                return await _context
+                    .Units
+                    .AnyAsync(u => u.Name.ToLower() == name.ToLower() && u.Id != id);
         }
 
         public async Task<bool> UnitExistsAsync(int id)
