@@ -31,5 +31,7 @@ dotnet run
 - Add QueryObject (filtering, sorting)
 - Format user inputs ToUpper in some cases
 - Check unique prop if already exist
-- Prevent delete relational models is it has associated key
+- Prevent delete relational models if it has associated key
 - Add authentication
+- Catch exceptions
+- Refactor DTOs to Record
