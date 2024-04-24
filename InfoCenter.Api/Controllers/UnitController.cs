@@ -1,6 +1,7 @@
 using InfoCenter.Api.DTOs.Unit;
 using InfoCenter.Api.Interfaces;
 using InfoCenter.Api.Mappers;
+using InfoCenter.Api.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Swashbuckle.AspNetCore.Annotations;
@@ -30,7 +31,7 @@ namespace InfoCenter.Api.Controllers
             return Ok(unitsDTO);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         [SwaggerOperation(Summary = "Returns a single Unit with the specified ID.")]
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
@@ -63,7 +64,7 @@ namespace InfoCenter.Api.Controllers
             }
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{id:int}")]
         [SwaggerOperation(Summary = "Updates an existing Unit with the specified ID.")]
         public async Task<IActionResult> UpdateById(
             [FromRoute] int id,
@@ -72,6 +73,9 @@ namespace InfoCenter.Api.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+
+            if (!await _unitRepository.UnitExistsAsync(id))
+                return NotFound("Unit does not exists with the given ID.");
 
             if (await _unitRepository.IsUnitNameExistsAsync(unitDTO.Name, id))
                 return BadRequest("Name must be unique.");
@@ -83,7 +87,7 @@ namespace InfoCenter.Api.Controllers
             return NoContent();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:int}")]
         [SwaggerOperation(Summary = "Deletes a Unit with the specified ID.")]
         public async Task<IActionResult> DeleteById([FromRoute] int id)
         {

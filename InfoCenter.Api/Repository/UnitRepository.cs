@@ -45,14 +45,16 @@ namespace InfoCenter.Api.Repository
             return await _context.Units.FindAsync(id);
         }
 
-        public async Task<bool> IsUnitNameExistsAsync(string name, int id = 0)
+        public async Task<bool> IsUnitNameExistsAsync(string name)
         {
-            if (id == 0)
-                return await _context.Units.AnyAsync(u => u.Name.ToLower() == name.ToLower());
-            else
-                return await _context
-                    .Units
-                    .AnyAsync(u => u.Name.ToLower() == name.ToLower() && u.Id != id);
+            return await _context.Units.AnyAsync(u => u.Name.ToLower() == name.ToLower());
+        }
+
+        public async Task<bool> IsUnitNameExistsAsync(string name, int id)
+        {
+            return await _context.Units.AnyAsync(u =>
+                u.Name.ToLower() == name.ToLower() && u.Id != id
+            );
         }
 
         public async Task<bool> UnitExistsAsync(int id)
