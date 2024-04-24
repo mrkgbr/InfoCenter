@@ -29,9 +29,8 @@ dotnet run
 
 - Implement other models and logic (ArticleDetails)
 - Add QueryObject (filtering, sorting)
+- Check uniqueness, if entity exists. How... in controller or in repository?
+- Refactor DTOs to Record
 - Format user inputs ToUpper in some cases
-- Check unique prop if already exist
 - Prevent delete relational models if it has associated key
 - Add authentication
-- Catch exceptions
-- Refactor DTOs to Record
