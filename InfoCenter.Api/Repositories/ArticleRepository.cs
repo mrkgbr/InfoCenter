@@ -5,7 +5,7 @@ using InfoCenter.Api.Interfaces;
 using InfoCenter.Api.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace InfoCenter.Api.Repository
+namespace InfoCenter.Api.Repositories
 {
     public class ArticleRepository : IArticleRepository
     {

@@ -1,6 +1,6 @@
 using InfoCenter.Api.Data;
 using InfoCenter.Api.Interfaces;
-using InfoCenter.Api.Repository;
+using InfoCenter.Api.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
