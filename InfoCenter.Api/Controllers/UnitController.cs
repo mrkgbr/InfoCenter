@@ -1,4 +1,5 @@
 using InfoCenter.Api.DTOs.Unit;
+using InfoCenter.Api.Exceptions;
 using InfoCenter.Api.Interfaces;
 using InfoCenter.Api.Mappers;
 using InfoCenter.Api.Models;
@@ -36,8 +37,6 @@ namespace InfoCenter.Api.Controllers
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
             var unit = await _unitRepository.GetByIdAsync(id);
-            if (unit is null)
-                return NotFound();
 
             return Ok(unit.ToDTO());
         }
@@ -49,19 +48,9 @@ namespace InfoCenter.Api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            try
-            {
-                if (await _unitRepository.IsUnitNameExistsAsync(unitDTO.Name))
-                    return BadRequest("Name must be unique.");
+            var unit = await _unitRepository.CreateAsync(unitDTO.ToModelFromCreateDTO());
 
-                var unit = await _unitRepository.CreateAsync(unitDTO.ToModelFromCreateDTO());
-
-                return CreatedAtAction(nameof(GetById), new { id = unit.Id }, unit.ToDTO());
-            }
-            catch (DbUpdateException ex)
-            {
-                return BadRequest(ex.InnerException?.Message);
-            }
+            return CreatedAtAction(nameof(GetById), new { id = unit.Id }, unit.ToDTO());
         }
 
         [HttpPut("{id:int}")]
@@ -74,15 +63,7 @@ namespace InfoCenter.Api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (!await _unitRepository.UnitExistsAsync(id))
-                return NotFound("Unit does not exists with the given ID.");
-
-            if (await _unitRepository.IsUnitNameExistsAsync(unitDTO.Name, id))
-                return BadRequest("Name must be unique.");
-
-            var existingUnit = await _unitRepository.UpdateAsync(id, unitDTO);
-            if (existingUnit is null)
-                return NotFound();
+            await _unitRepository.UpdateAsync(id, unitDTO);
 
             return NoContent();
         }

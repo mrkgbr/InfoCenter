@@ -1,5 +1,6 @@
 using InfoCenter.Api.Data;
 using InfoCenter.Api.Interfaces;
+using InfoCenter.Api.Middlewares;
 using InfoCenter.Api.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,6 +26,9 @@ builder
             .Ignore;
     });
 
+builder.Services.AddLogging();
+builder.Services.AddTransient<GlobalExceptionHandlingMiddleware>();
+
 builder.Services.AddScoped<IUnitRepository, UnitRepository>();
 builder.Services.AddScoped<IArticleRepository, ArticleRepository>();
 builder.Services.AddScoped<ICurrencyRepository, CurrencyRepository>();
@@ -43,6 +47,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 
 app.MapControllers();
 

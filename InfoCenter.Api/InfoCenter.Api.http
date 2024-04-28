@@ -1,6 +1,15 @@
 @InfoCenter.Api_HostAddress = http://localhost:5193
 
-GET {{InfoCenter.Api_HostAddress}}/weatherforecast/
+GET {{InfoCenter.Api_HostAddress}}/unit/
 Accept: application/json
+
+###
+POST {{InfoCenter.Api_HostAddress}}/unit/
+Content-Type: application/json
+
+{
+  "name": "string",
+  "description": "string"
+}
 
 ###
