@@ -16,7 +16,7 @@ namespace InfoCenter.Api.Repositories
             _context = context;
         }
 
-        private async Task<Unit> ExistingUnit(int id)
+        private async Task<Unit> GetExistingUnit(int id)
         {
             return await _context.Units.FindAsync(id)
                 ?? throw new HttpResponseException(404, "Unit does not exists with the given ID.");
@@ -41,7 +41,7 @@ namespace InfoCenter.Api.Repositories
 
         public async Task<Unit> DeleteAsync(int id)
         {
-            Unit existingUnit = await ExistingUnit(id);
+            Unit existingUnit = await GetExistingUnit(id);
 
             _context.Units.Remove(existingUnit);
             await _context.SaveChangesAsync();
@@ -56,14 +56,14 @@ namespace InfoCenter.Api.Repositories
 
         public async Task<Unit> GetByIdAsync(int id)
         {
-            Unit existingUnit = await ExistingUnit(id);
+            Unit existingUnit = await GetExistingUnit(id);
 
             return existingUnit;
         }
 
         public async Task<Unit> UpdateAsync(int id, UpdateUnitDTO unitDTO)
         {
-            Unit existingUnit = await ExistingUnit(id);
+            Unit existingUnit = await GetExistingUnit(id);
 
             // checking name uniqueness
             if (
