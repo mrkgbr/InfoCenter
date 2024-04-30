@@ -8,12 +8,12 @@ namespace InfoCenter.Api.Mappers
         public static UnitDTO ToDTO(this Unit unit)
         {
             return new UnitDTO
-            {
-                Id = unit.Id,
-                Name = unit.Name,
-                Description = unit.Description,
-                IsActive = unit.IsActive
-            };
+            (
+                unit.Id,
+                unit.Name,
+                unit.Description,
+                unit.IsActive
+            );
         }
         public static Unit ToModelFromCreateDTO(this CreateUnitDTO unitDTO)
         {
