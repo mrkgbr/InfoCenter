@@ -71,7 +71,7 @@ namespace InfoCenter.Api.Repositories
                     u.Name.ToLower() == unitDTO.Name.ToLower() && u.Id != id
                 )
             )
-                throw new HttpResponseException(400, "Name must be unique.");
+                throw new HttpResponseException(400, "Unit name must be unique.");
 
             existingUnit.Name = unitDTO.Name;
             existingUnit.Description = unitDTO.Description;
