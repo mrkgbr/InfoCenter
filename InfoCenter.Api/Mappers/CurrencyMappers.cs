@@ -8,12 +8,12 @@ namespace InfoCenter.Api.Mappers
         public static CurrencyDTO ToDTO(this Currency currencyModel)
         {
             return new CurrencyDTO
-            {
-                Id = currencyModel.Id,
-                Name = currencyModel.Name,
-                Description = currencyModel.Description,
-                IsActive = currencyModel.IsActive
-            };
+            (
+                currencyModel.Id,
+                currencyModel.Name,
+                currencyModel.Description,
+                currencyModel.IsActive
+            );
         }
 
         public static Currency ToModelFromCreateDTO(this CreateCurrencyDTO currencyDTO)

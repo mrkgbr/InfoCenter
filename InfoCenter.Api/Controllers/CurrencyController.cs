@@ -34,8 +34,6 @@ namespace InfoCenter.Api.Controllers
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
             var currency = await _currencyRepository.GetByIdAsync(id);
-            if (currency is null)
-                return NotFound();
 
             return Ok(currency.ToDTO());
         }
@@ -64,9 +62,7 @@ namespace InfoCenter.Api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var currency = await _currencyRepository.UpdateAsync(id, currencyDTO);
-            if (currency is null)
-                return NotFound();
+            await _currencyRepository.UpdateAsync(id, currencyDTO);
 
             return NoContent();
         }
@@ -78,9 +74,7 @@ namespace InfoCenter.Api.Controllers
             if (await _articleDetailRepository.HasCurrencyReference(id))
                 return BadRequest("Some Article Detail has Currency reference, cannot delete");
 
-            var currency = await _currencyRepository.DeleteAsync(id);
-            if (currency is null)
-                return NotFound();
+            await _currencyRepository.DeleteAsync(id);
 
             return NoContent();
         }
