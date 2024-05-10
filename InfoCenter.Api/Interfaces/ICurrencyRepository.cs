@@ -10,6 +10,6 @@ namespace InfoCenter.Api.Interfaces
         Task<Currency> CreateAsync(Currency currencyModel);
         Task<Currency> UpdateAsync(int id, UpdateCurrencyDTO currencyDTO);
         Task<Currency> DeleteAsync(int id);
-        Task<bool> CurrencyExistAsync(int id);
+        Task<bool> ExistAsync(int id);
     }
 }

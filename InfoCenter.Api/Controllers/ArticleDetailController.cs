@@ -49,11 +49,11 @@ public class ArticleDetailController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateArticleDetailDTO articleDetailDTO)
     {
-        if (!await _articleRepository.ArticleExistAsync(articleDetailDTO.ArticleId))
+        if (!await _articleRepository.ExistAsync(articleDetailDTO.ArticleId))
             return BadRequest("Article does not exist");
-        if (!await _contractRepository.ContractExistAsync(articleDetailDTO.ContractId))
+        if (!await _contractRepository.ExistsAsync(articleDetailDTO.ContractId))
             return BadRequest("Contract does not exist");
-        if (!await _currencyRepository.CurrencyExistAsync(articleDetailDTO.CurrencyId))
+        if (!await _currencyRepository.ExistAsync(articleDetailDTO.CurrencyId))
             return BadRequest("Currency does not exist");
 
         var articleDetail = await _articleDetailRepository.CreateAsync(
@@ -73,11 +73,11 @@ public class ArticleDetailController : ControllerBase
         [FromBody] UpdateArticleDetailDTO articleDetailDTO
     )
     {
-        if (!await _articleRepository.ArticleExistAsync(articleDetailDTO.ArticleId))
+        if (!await _articleRepository.ExistAsync(articleDetailDTO.ArticleId))
             return BadRequest("Article does not exist");
-        if (!await _contractRepository.ContractExistAsync(articleDetailDTO.ContractId))
+        if (!await _contractRepository.ExistsAsync(articleDetailDTO.ContractId))
             return BadRequest("Contract does not exist");
-        if (!await _currencyRepository.CurrencyExistAsync(articleDetailDTO.CurrencyId))
+        if (!await _currencyRepository.ExistAsync(articleDetailDTO.CurrencyId))
             return BadRequest("Currency does not exist");
 
         var articleDetail = await _articleDetailRepository.UpdateAsync(id, articleDetailDTO);

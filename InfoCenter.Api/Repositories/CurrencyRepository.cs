@@ -40,7 +40,7 @@ namespace InfoCenter.Api.Repositories
             return currencyModel;
         }
 
-        public async Task<bool> CurrencyExistAsync(int id)
+        public async Task<bool> ExistAsync(int id)
         {
             return await _context.Currencies.AnyAsync(c => c.Id == id);
         }
