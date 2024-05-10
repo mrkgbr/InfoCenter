@@ -15,7 +15,32 @@ public class ContractRepository : IContractRepository
         _context = context;
     }
 
-    public async Task<bool> ContractExistAsync(int id)
+    public async Task<string?> CheckCreateUniqueness(CreateContractDTO contractDTO)
+    {
+        if (
+            await _context.Contracts.AnyAsync(c =>
+                c.ContractNumber.ToLower() == contractDTO.ContractNumber.ToLower()
+            )
+        )
+            return "ContractNumber must be unique.";
+
+        return null;
+    }
+
+    public async Task<string?> CheckUpdateUniqueness(int id, UpdateContractDTO contractModel)
+    {
+        if (
+            await _context.Contracts.AnyAsync(c =>
+                c.ContractNumber.ToLower() == contractModel.ContractNumber.ToLower()
+                && c.Id != id
+            )
+        )
+            return "ContractNumber must be unique.";
+
+        return null;
+    }
+
+    public async Task<bool> ExistsAsync(int id)
     {
         return await _context.Contracts.AnyAsync(c => c.Id == id);
     }
@@ -45,7 +70,7 @@ public class ContractRepository : IContractRepository
         return await _context.Contracts.ToListAsync();
     }
 
-    public async Task<Contract?> GetByIdAsnyc(int id)
+    public async Task<Contract?> GetByIdAsync(int id)
     {
         return await _context.Contracts.FindAsync(id);
     }

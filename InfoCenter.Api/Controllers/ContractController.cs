@@ -33,7 +33,7 @@ namespace InfoCenter.Api.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
-            var contract = await _contractRepo.GetByIdAsnyc(id);
+            var contract = await _contractRepo.GetByIdAsync(id);
             if (contract is null)
                 return NotFound();
 
@@ -45,6 +45,10 @@ namespace InfoCenter.Api.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+
+            string? checkResponse = await _contractRepo.CheckCreateUniqueness(contractDTO);
+            if (string.IsNullOrWhiteSpace(checkResponse))
+                return BadRequest(checkResponse);
 
             var contract = await _contractRepo.CreateAsync(contractDTO.ToModelFromCreateDTO());
 
@@ -60,6 +64,13 @@ namespace InfoCenter.Api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
+            if (!await _contractRepo.ExistsAsync(id))
+                return NotFound();
+
+            string? checkResponse = await _contractRepo.CheckUpdateUniqueness(id, updateDTO);
+            if (string.IsNullOrWhiteSpace(checkResponse))
+                return BadRequest(checkResponse);
+
             var contract = await _contractRepo.UpdateAsync(id, updateDTO);
             if (contract is null)
                 return NotFound();
@@ -70,6 +81,9 @@ namespace InfoCenter.Api.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
+            if (!await _contractRepo.ExistsAsync(id))
+                return NotFound();
+
             if (await _articleDetailRepository.HasContractReference(id))
                 return BadRequest("Some Article Detail has Contract reference, cannot delete");
 
