@@ -16,14 +16,26 @@ namespace InfoCenter.Api.Repositories
             _context = context;
         }
 
-        public async Task<bool> ExistsAsync(int id)
+        public async Task<string?> CheckCreateUniquenessAsync(CreateArticleDTO articleDTO)
         {
-            return await _context.Articles.AnyAsync(a => a.Id == id);
+            if (await _context.Articles.AnyAsync(u => u.SapNumber == articleDTO.SapNumber))
+                return "SapNumber must be unique.";
+
+            if (await _context.Articles.AnyAsync(u => u.Name == articleDTO.Name))
+                return "Name must be unique.";
+
+            return null;
         }
 
-        public async Task<bool> HasUnitReferenceAsync(int id)
+        public async Task<string?> CheckUpdateUniquenessAsync(UpdateArticleDTO articleModel)
         {
-            return await _context.Articles.AnyAsync(article => article.UnitId == id);
+            if (await _context.Articles.AnyAsync(u => u.SapNumber.ToLower() == articleModel.SapNumber.ToLower() && u.Id != articleModel.Id))
+                return "SapNumber must be unique.";
+
+            if (await _context.Articles.AnyAsync(u => u.Name.ToLower() == articleModel.Name.ToLower() && u.Id != articleModel.Id))
+                return "Name must be unique.";
+
+            return null;
         }
 
         public async Task<Article> CreateAsync(Article articleModel)
@@ -44,6 +56,11 @@ namespace InfoCenter.Api.Repositories
             await _context.SaveChangesAsync();
 
             return existingArticle;
+        }
+
+        public async Task<bool> ExistsAsync(int id)
+        {
+            return await _context.Articles.AnyAsync(a => a.Id == id);
         }
 
         public async Task<List<Article>> GetAllAsync(QueryObject query)
@@ -80,6 +97,18 @@ namespace InfoCenter.Api.Repositories
             return await _context.Articles.FindAsync(id);
         }
 
+        public async Task<Article?> GetByIdSummaryAsync(int id)
+        {
+            return await _context
+                .Articles.Include(a => a.Unit)
+                .FirstOrDefaultAsync(a => a.Id == id);
+        }
+
+        public async Task<bool> HasUnitReferenceAsync(int id)
+        {
+            return await _context.Articles.AnyAsync(article => article.UnitId == id);
+        }
+
         public async Task<Article?> UpdateAsync(int id, UpdateArticleDTO articleDTO)
         {
             var existingArticle = await _context.Articles.FindAsync(id);
@@ -95,13 +124,6 @@ namespace InfoCenter.Api.Repositories
             await _context.SaveChangesAsync();
 
             return existingArticle;
-        }
-
-        public async Task<Article?> GetByIdSummaryAsync(int id)
-        {
-            return await _context
-                .Articles.Include(a => a.Unit)
-                .FirstOrDefaultAsync(a => a.Id == id);
         }
     }
 }

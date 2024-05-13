@@ -34,11 +34,10 @@ namespace InfoCenter.Api.Controllers
             return Ok(articlesDTO);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
             var article = await _articleRepository.GetByIdAsync(id);
-
             if (article is null)
                 return NotFound();
 
@@ -46,7 +45,7 @@ namespace InfoCenter.Api.Controllers
         }
 
         [HttpGet]
-        [Route("Summary/{id}")]
+        [Route("Summary/{id:int}")]
         public async Task<IActionResult> GetByIdSummary([FromRoute] int id)
         {
             var article = await _articleRepository.GetByIdSummaryAsync(id);
@@ -65,22 +64,33 @@ namespace InfoCenter.Api.Controllers
             if (!await _unitRepository.ExistsAsync(articleDTO.UnitId))
                 return BadRequest("Unit does not exist");
 
+            string? message = await _articleRepository.CheckCreateUniquenessAsync(articleDTO);
+            if (!string.IsNullOrWhiteSpace(message))
+                return BadRequest(message);
+
             var article = await _articleRepository.CreateAsync(articleDTO.ToModelFromCreateDTO());
 
             return CreatedAtAction(nameof(GetById), new { id = article.Id }, article.ToDTO());
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{id:int}")]
         public async Task<IActionResult> Update(
             [FromRoute] int id,
             [FromBody] UpdateArticleDTO articleDTO
         )
         {
+            if (id != articleDTO.Id)
+                return BadRequest();
+
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             if (!await _unitRepository.ExistsAsync(articleDTO.UnitId))
                 return BadRequest("Unit does not exist");
+
+            string? message = await _articleRepository.CheckUpdateUniquenessAsync(articleDTO);
+            if (!string.IsNullOrWhiteSpace(message))
+                return BadRequest(message);
 
             var article = await _articleRepository.UpdateAsync(id, articleDTO);
             if (article is null)
@@ -89,7 +99,7 @@ namespace InfoCenter.Api.Controllers
             return NoContent();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             if (await _articleDetailRepository.HasArticleReference(id))

@@ -6,6 +6,8 @@ namespace InfoCenter.Api.Interfaces
 {
     public interface IArticleRepository
     {
+        Task<string?> CheckCreateUniquenessAsync(CreateArticleDTO articleDTO);
+        Task<string?> CheckUpdateUniquenessAsync(UpdateArticleDTO articleModel);
         Task<Article> CreateAsync(Article articleModel);
         Task<Article?> DeleteAsync(int id);
         Task<bool> ExistsAsync(int id);

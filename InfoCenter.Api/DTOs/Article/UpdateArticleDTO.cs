@@ -5,6 +5,9 @@ namespace InfoCenter.Api.DTOs.Article
     public class UpdateArticleDTO
     {
         [Required]
+        public int Id { get; set; }
+
+        [Required]
         [MaxLength(10, ErrorMessage = "Sap Number cannot be longer than 10 characters")]
         public string SapNumber { get; set; } = string.Empty;
 
