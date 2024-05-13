@@ -5,8 +5,8 @@ namespace InfoCenter.Api.Interfaces;
 
 public interface IContractRepository
 {
-    Task<string?> CheckCreateUniqueness(CreateContractDTO contractDTO);
-    Task<string?> CheckUpdateUniqueness(UpdateContractDTO contractModel);
+    Task<string?> CheckCreateUniquenessAsync(CreateContractDTO contractDTO);
+    Task<string?> CheckUpdateUniquenessAsync(UpdateContractDTO contractModel);
     Task<Contract> CreateAsync(Contract contractModel);
     Task<Contract?> DeleteAsync(int id);
     Task<bool> ExistsAsync(int id);

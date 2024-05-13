@@ -5,8 +5,8 @@ namespace InfoCenter.Api.Interfaces
 {
     public interface ICurrencyRepository
     {
-        Task<string?> CheckCreateUniqueness(CreateCurrencyDTO currencyDTO);
-        Task<string?> CheckUpdateUniqueness(UpdateCurrencyDTO currencyModel);
+        Task<string?> CheckCreateUniquenessAsync(CreateCurrencyDTO currencyDTO);
+        Task<string?> CheckUpdateUniquenessAsync(UpdateCurrencyDTO currencyModel);
         Task<Currency> CreateAsync(Currency currencyModel);
         Task<Currency?> DeleteAsync(int id);
         Task<bool> ExistsAsync(int id);

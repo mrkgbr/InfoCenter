@@ -15,7 +15,7 @@ public class ContractRepository : IContractRepository
         _context = context;
     }
 
-    public async Task<string?> CheckCreateUniqueness(CreateContractDTO contractDTO)
+    public async Task<string?> CheckCreateUniquenessAsync(CreateContractDTO contractDTO)
     {
         if (
             await _context.Contracts.AnyAsync(c =>
@@ -27,7 +27,7 @@ public class ContractRepository : IContractRepository
         return null;
     }
 
-    public async Task<string?> CheckUpdateUniqueness(UpdateContractDTO contractModel)
+    public async Task<string?> CheckUpdateUniquenessAsync(UpdateContractDTO contractModel)
     {
         if (
             await _context.Contracts.AnyAsync(c =>

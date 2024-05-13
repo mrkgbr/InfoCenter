@@ -15,7 +15,7 @@ namespace InfoCenter.Api.Repositories
             _context = context;
         }
 
-        public async Task<string?> CheckCreateUniqueness(CreateCurrencyDTO currencyDTO)
+        public async Task<string?> CheckCreateUniquenessAsync(CreateCurrencyDTO currencyDTO)
         {
             if (
                 await _context.Currencies.AnyAsync(c =>
@@ -27,7 +27,7 @@ namespace InfoCenter.Api.Repositories
             return null;
         }
 
-        public async Task<string?> CheckUpdateUniqueness(UpdateCurrencyDTO currencyModel)
+        public async Task<string?> CheckUpdateUniquenessAsync(UpdateCurrencyDTO currencyModel)
         {
             if (
                 await _context.Currencies.AnyAsync(c =>
