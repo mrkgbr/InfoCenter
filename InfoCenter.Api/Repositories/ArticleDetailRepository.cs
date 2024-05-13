@@ -62,7 +62,9 @@ public class ArticleDetailRepository : IArticleDetailRepository
 
     public async Task<ArticleDetail?> UpdateAsync(UpdateArticleDetailDTO updateArticleDetailDTO)
     {
-        var existingArticleDetail = await _context.ArticleDetails.FindAsync(updateArticleDetailDTO.Id);
+        var existingArticleDetail = await _context.ArticleDetails.FindAsync(
+            updateArticleDetailDTO.Id
+        );
         if (existingArticleDetail is null)
             return null;
 

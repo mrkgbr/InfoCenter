@@ -29,10 +29,19 @@ namespace InfoCenter.Api.Repositories
 
         public async Task<string?> CheckUpdateUniquenessAsync(UpdateArticleDTO articleModel)
         {
-            if (await _context.Articles.AnyAsync(u => u.SapNumber.ToLower() == articleModel.SapNumber.ToLower() && u.Id != articleModel.Id))
+            if (
+                await _context.Articles.AnyAsync(u =>
+                    u.SapNumber.ToLower() == articleModel.SapNumber.ToLower()
+                    && u.Id != articleModel.Id
+                )
+            )
                 return "SapNumber must be unique.";
 
-            if (await _context.Articles.AnyAsync(u => u.Name.ToLower() == articleModel.Name.ToLower() && u.Id != articleModel.Id))
+            if (
+                await _context.Articles.AnyAsync(u =>
+                    u.Name.ToLower() == articleModel.Name.ToLower() && u.Id != articleModel.Id
+                )
+            )
                 return "Name must be unique.";
 
             return null;

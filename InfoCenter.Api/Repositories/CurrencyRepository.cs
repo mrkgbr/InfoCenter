@@ -39,7 +39,6 @@ namespace InfoCenter.Api.Repositories
             return null;
         }
 
-
         public async Task<Currency> CreateAsync(Currency currencyModel)
         {
             await _context.Currencies.AddAsync(currencyModel);
