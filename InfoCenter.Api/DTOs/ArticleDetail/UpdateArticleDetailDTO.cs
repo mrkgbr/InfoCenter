@@ -5,6 +5,9 @@ namespace InfoCenter.Api.DTOs.ArticleDetail;
 public class UpdateArticleDetailDTO
 {
     [Required]
+    public int Id { get; set; }
+
+    [Required]
     public decimal Price { get; set; }
 
     [Required]

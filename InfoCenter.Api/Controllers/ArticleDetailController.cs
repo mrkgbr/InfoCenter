@@ -80,7 +80,7 @@ public class ArticleDetailController : ControllerBase
         if (!await _currencyRepository.ExistsAsync(articleDetailDTO.CurrencyId))
             return BadRequest("Currency does not exist");
 
-        var articleDetail = await _articleDetailRepository.UpdateAsync(id, articleDetailDTO);
+        var articleDetail = await _articleDetailRepository.UpdateAsync(articleDetailDTO);
         if (articleDetail is null)
             return NotFound();
 

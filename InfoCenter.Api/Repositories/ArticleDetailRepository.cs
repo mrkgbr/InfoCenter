@@ -15,21 +15,6 @@ public class ArticleDetailRepository : IArticleDetailRepository
         _context = context;
     }
 
-    public async Task<bool> HasArticleReference(int id)
-    {
-        return await _context.ArticleDetails.AnyAsync(a => a.ArticleId == id);
-    }
-
-    public async Task<bool> HasContractReference(int id)
-    {
-        return await _context.ArticleDetails.AnyAsync(c => c.ContractId == id);
-    }
-
-    public async Task<bool> HasCurrencyReference(int id)
-    {
-        return await _context.ArticleDetails.AnyAsync(c => c.CurrencyId == id);
-    }
-
     public async Task<ArticleDetail> CreateAsync(ArticleDetail articleDetailModel)
     {
         await _context.ArticleDetails.AddAsync(articleDetailModel);
@@ -60,12 +45,24 @@ public class ArticleDetailRepository : IArticleDetailRepository
         return await _context.ArticleDetails.FindAsync(id);
     }
 
-    public async Task<ArticleDetail?> UpdateAsync(
-        int id,
-        UpdateArticleDetailDTO updateArticleDetailDTO
-    )
+    public async Task<bool> HasArticleReference(int id)
     {
-        var existingArticleDetail = await _context.ArticleDetails.FindAsync(id);
+        return await _context.ArticleDetails.AnyAsync(a => a.ArticleId == id);
+    }
+
+    public async Task<bool> HasContractReference(int id)
+    {
+        return await _context.ArticleDetails.AnyAsync(c => c.ContractId == id);
+    }
+
+    public async Task<bool> HasCurrencyReference(int id)
+    {
+        return await _context.ArticleDetails.AnyAsync(c => c.CurrencyId == id);
+    }
+
+    public async Task<ArticleDetail?> UpdateAsync(UpdateArticleDetailDTO updateArticleDetailDTO)
+    {
+        var existingArticleDetail = await _context.ArticleDetails.FindAsync(updateArticleDetailDTO.Id);
         if (existingArticleDetail is null)
             return null;
 
