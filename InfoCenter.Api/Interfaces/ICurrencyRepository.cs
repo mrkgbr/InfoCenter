@@ -5,11 +5,13 @@ namespace InfoCenter.Api.Interfaces
 {
     public interface ICurrencyRepository
     {
-        Task<List<Currency>> GetAllAsync();
-        Task<Currency> GetByIdAsync(int id);
+        Task<string?> CheckCreateUniqueness(CreateCurrencyDTO currencyDTO);
+        Task<string?> CheckUpdateUniqueness(UpdateCurrencyDTO currencyModel);
         Task<Currency> CreateAsync(Currency currencyModel);
-        Task<Currency> UpdateAsync(int id, UpdateCurrencyDTO currencyDTO);
-        Task<Currency> DeleteAsync(int id);
-        Task<bool> ExistAsync(int id);
+        Task<Currency?> DeleteAsync(int id);
+        Task<bool> ExistsAsync(int id);
+        Task<List<Currency>> GetAllAsync();
+        Task<Currency?> GetByIdAsync(int id);
+        Task<Currency?> UpdateAsync(UpdateCurrencyDTO currencyDTO);
     }
 }

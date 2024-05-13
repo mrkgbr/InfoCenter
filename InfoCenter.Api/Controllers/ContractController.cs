@@ -30,7 +30,7 @@ namespace InfoCenter.Api.Controllers
             return Ok(contractsDTO);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
             var contract = await _contractRepo.GetByIdAsync(id);
@@ -55,30 +55,33 @@ namespace InfoCenter.Api.Controllers
             return CreatedAtAction(nameof(GetById), new { id = contract.Id }, contract.ToDTO());
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{id:int}")]
         public async Task<IActionResult> Update(
             [FromRoute] int id,
             [FromBody] UpdateContractDTO updateDTO
         )
         {
+            if (id != updateDTO.Id)
+                return BadRequest();
+
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             if (!await _contractRepo.ExistsAsync(id))
                 return NotFound();
 
-            string? checkResponse = await _contractRepo.CheckUpdateUniqueness(id, updateDTO);
+            string? checkResponse = await _contractRepo.CheckUpdateUniqueness(updateDTO);
             if (!string.IsNullOrWhiteSpace(checkResponse))
                 return BadRequest(checkResponse);
 
-            var contract = await _contractRepo.UpdateAsync(id, updateDTO);
+            var contract = await _contractRepo.UpdateAsync(updateDTO);
             if (contract is null)
                 return NotFound();
 
             return NoContent();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             if (!await _contractRepo.ExistsAsync(id))

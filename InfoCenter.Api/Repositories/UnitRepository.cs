@@ -1,6 +1,5 @@
 using InfoCenter.Api.Data;
 using InfoCenter.Api.DTOs.Unit;
-using InfoCenter.Api.Exceptions;
 using InfoCenter.Api.Interfaces;
 using InfoCenter.Api.Models;
 using Microsoft.EntityFrameworkCore;
@@ -16,32 +15,39 @@ namespace InfoCenter.Api.Repositories
             _context = context;
         }
 
-        private async Task<Unit> GetExistingUnit(int id)
+        public async Task<string?> CheckCreateUniquenessAsync(CreateUnitDTO unitDTO)
         {
-            return await _context.Units.FindAsync(id)
-                ?? throw new HttpResponseException(404, "Unit does not exists with the given ID.");
+            if (await _context.Units.AnyAsync(u => u.Name.ToLower() == unitDTO.Name.ToLower()))
+                return "Unit name must be unique";
+
+            return null;
         }
 
-        public async Task<bool> UnitExistsAsync(int id)
+        public async Task<string?> CheckUpdateUniquenessAsync(UpdateUnitDTO unitModel)
         {
-            return await _context.Units.AnyAsync(unit => unit.Id == id);
+            if (
+                await _context.Units.AnyAsync(u =>
+                    u.Name.ToLower() == unitModel.Name.ToLower() && u.Id != unitModel.Id
+                )
+            )
+                return "Unit name must be unique.";
+
+            return null;
         }
 
         public async Task<Unit> CreateAsync(Unit unitModel)
         {
-            // checking name uniqueness
-            if (await _context.Units.AnyAsync(u => u.Name.ToLower() == unitModel.Name.ToLower()))
-                throw new HttpResponseException(400, "Unit name must be unique");
-
             await _context.Units.AddAsync(unitModel);
             await _context.SaveChangesAsync();
 
             return unitModel;
         }
 
-        public async Task<Unit> DeleteAsync(int id)
+        public async Task<Unit?> DeleteAsync(int id)
         {
-            Unit existingUnit = await GetExistingUnit(id);
+            var existingUnit = await _context.Units.FindAsync(id);
+            if (existingUnit is null)
+                return null;
 
             _context.Units.Remove(existingUnit);
             await _context.SaveChangesAsync();
@@ -49,29 +55,30 @@ namespace InfoCenter.Api.Repositories
             return existingUnit;
         }
 
+        public async Task<bool> ExistsAsync(int id)
+        {
+            return await _context.Units.AnyAsync(unit => unit.Id == id);
+        }
+
         public async Task<List<Unit>> GetAllAsync()
         {
             return await _context.Units.ToListAsync();
         }
 
-        public async Task<Unit> GetByIdAsync(int id)
+        public async Task<Unit?> GetByIdAsync(int id)
         {
-            Unit existingUnit = await GetExistingUnit(id);
+            var existingUnit = await _context.Units.FindAsync(id);
+            if (existingUnit is null)
+                return null;
 
             return existingUnit;
         }
 
-        public async Task<Unit> UpdateAsync(int id, UpdateUnitDTO unitDTO)
+        public async Task<Unit?> UpdateAsync(UpdateUnitDTO unitDTO)
         {
-            Unit existingUnit = await GetExistingUnit(id);
-
-            // checking name uniqueness
-            if (
-                await _context.Units.AnyAsync(u =>
-                    u.Name.ToLower() == unitDTO.Name.ToLower() && u.Id != id
-                )
-            )
-                throw new HttpResponseException(400, "Unit name must be unique.");
+            var existingUnit = await _context.Units.FindAsync(unitDTO.Id);
+            if (existingUnit is null)
+                return null;
 
             existingUnit.Name = unitDTO.Name;
             existingUnit.Description = unitDTO.Description;

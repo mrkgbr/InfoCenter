@@ -62,7 +62,7 @@ namespace InfoCenter.Api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (!await _unitRepository.UnitExistsAsync(articleDTO.UnitId))
+            if (!await _unitRepository.ExistsAsync(articleDTO.UnitId))
                 return BadRequest("Unit does not exist");
 
             var article = await _articleRepository.CreateAsync(articleDTO.ToModelFromCreateDTO());
@@ -79,7 +79,7 @@ namespace InfoCenter.Api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (!await _unitRepository.UnitExistsAsync(articleDTO.UnitId))
+            if (!await _unitRepository.ExistsAsync(articleDTO.UnitId))
                 return BadRequest("Unit does not exist");
 
             var article = await _articleRepository.UpdateAsync(id, articleDTO);

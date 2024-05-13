@@ -2,8 +2,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace InfoCenter.Api.DTOs.Unit;
 
-public record UpdateUnitDTO
-(
+public record UpdateUnitDTO(
+    [Required]
+    int Id,
+
     [Required]
     [MaxLength(10, ErrorMessage = "Name cannot be longer than 10 characters")]
     string Name,

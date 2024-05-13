@@ -5,6 +5,9 @@ namespace InfoCenter.Api.DTOs.Contract;
 public class UpdateContractDTO
 {
     [Required]
+    public int Id { get; set; }
+
+    [Required]
     [MaxLength(10, ErrorMessage = "Contract Number cannot be longer than 10 characters")]
     public string ContractNumber { get; set; } = string.Empty;
 

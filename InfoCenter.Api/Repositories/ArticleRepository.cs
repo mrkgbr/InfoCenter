@@ -16,7 +16,7 @@ namespace InfoCenter.Api.Repositories
             _context = context;
         }
 
-        public async Task<bool> ExistAsync(int id)
+        public async Task<bool> ExistsAsync(int id)
         {
             return await _context.Articles.AnyAsync(a => a.Id == id);
         }

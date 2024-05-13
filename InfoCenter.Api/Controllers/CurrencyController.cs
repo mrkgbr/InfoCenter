@@ -13,7 +13,10 @@ namespace InfoCenter.Api.Controllers
         private readonly ICurrencyRepository _currencyRepository;
         private readonly IArticleDetailRepository _articleDetailRepository;
 
-        public CurrencyController(ICurrencyRepository currencyRepository, IArticleDetailRepository articleDetailRepository)
+        public CurrencyController(
+            ICurrencyRepository currencyRepository,
+            IArticleDetailRepository articleDetailRepository
+        )
         {
             _currencyRepository = currencyRepository;
             _articleDetailRepository = articleDetailRepository;
@@ -29,11 +32,13 @@ namespace InfoCenter.Api.Controllers
             return Ok(currenciesDTO);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         [SwaggerOperation(Summary = "Returns a Currency with the specified ID.")]
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
             var currency = await _currencyRepository.GetByIdAsync(id);
+            if (currency is null)
+                return NotFound();
 
             return Ok(currency.ToDTO());
         }
@@ -45,6 +50,10 @@ namespace InfoCenter.Api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
+            string? checkResponse = await _currencyRepository.CheckCreateUniqueness(currencyDTO);
+            if (!string.IsNullOrWhiteSpace(checkResponse))
+                return BadRequest(checkResponse);
+
             var currency = await _currencyRepository.CreateAsync(
                 currencyDTO.ToModelFromCreateDTO()
             );
@@ -52,7 +61,7 @@ namespace InfoCenter.Api.Controllers
             return CreatedAtAction(nameof(GetById), new { id = currency.Id }, currency.ToDTO());
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{id:int}")]
         [SwaggerOperation(Summary = "Updates a Currency with the specified ID.")]
         public async Task<IActionResult> Update(
             [FromRoute] int id,
@@ -62,19 +71,36 @@ namespace InfoCenter.Api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            await _currencyRepository.UpdateAsync(id, currencyDTO);
+            if (id != currencyDTO.Id)
+                return BadRequest();
+
+            string? checkResponse = await _currencyRepository.CheckUpdateUniqueness(currencyDTO);
+            if (!string.IsNullOrWhiteSpace(checkResponse))
+                return BadRequest(checkResponse);
+
+            if (!await _currencyRepository.ExistsAsync(id))
+                return NotFound();
+
+            var currency = await _currencyRepository.UpdateAsync(currencyDTO);
+            if (currency is null)
+                return NotFound();
 
             return NoContent();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:int}")]
         [SwaggerOperation(Summary = "Deletes a Currency with the specified ID.")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
+            if (!await _currencyRepository.ExistsAsync(id))
+                return NotFound();
+
             if (await _articleDetailRepository.HasCurrencyReference(id))
                 return BadRequest("Some Article Detail has Currency reference, cannot delete");
 
-            await _currencyRepository.DeleteAsync(id);
+            var currency = await _currencyRepository.DeleteAsync(id);
+            if (currency is null)
+                return NotFound();
 
             return NoContent();
         }

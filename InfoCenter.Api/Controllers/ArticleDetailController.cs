@@ -36,7 +36,7 @@ public class ArticleDetailController : ControllerBase
         return Ok(articleDetailsDTO);
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id:int}")]
     public async Task<IActionResult> GetById([FromRoute] int id)
     {
         var articleDetail = await _articleDetailRepository.GetByIdAsync(id);
@@ -49,11 +49,11 @@ public class ArticleDetailController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateArticleDetailDTO articleDetailDTO)
     {
-        if (!await _articleRepository.ExistAsync(articleDetailDTO.ArticleId))
+        if (!await _articleRepository.ExistsAsync(articleDetailDTO.ArticleId))
             return BadRequest("Article does not exist");
         if (!await _contractRepository.ExistsAsync(articleDetailDTO.ContractId))
             return BadRequest("Contract does not exist");
-        if (!await _currencyRepository.ExistAsync(articleDetailDTO.CurrencyId))
+        if (!await _currencyRepository.ExistsAsync(articleDetailDTO.CurrencyId))
             return BadRequest("Currency does not exist");
 
         var articleDetail = await _articleDetailRepository.CreateAsync(
@@ -67,17 +67,17 @@ public class ArticleDetailController : ControllerBase
         );
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("{id:int}")]
     public async Task<IActionResult> Update(
         [FromRoute] int id,
         [FromBody] UpdateArticleDetailDTO articleDetailDTO
     )
     {
-        if (!await _articleRepository.ExistAsync(articleDetailDTO.ArticleId))
+        if (!await _articleRepository.ExistsAsync(articleDetailDTO.ArticleId))
             return BadRequest("Article does not exist");
         if (!await _contractRepository.ExistsAsync(articleDetailDTO.ContractId))
             return BadRequest("Contract does not exist");
-        if (!await _currencyRepository.ExistAsync(articleDetailDTO.CurrencyId))
+        if (!await _currencyRepository.ExistsAsync(articleDetailDTO.CurrencyId))
             return BadRequest("Currency does not exist");
 
         var articleDetail = await _articleDetailRepository.UpdateAsync(id, articleDetailDTO);
@@ -87,7 +87,7 @@ public class ArticleDetailController : ControllerBase
         return NoContent();
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete([FromRoute] int id)
     {
         var articleDetail = await _articleDetailRepository.DeleteAsync(id);

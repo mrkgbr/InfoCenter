@@ -1,10 +1,7 @@
 using InfoCenter.Api.DTOs.Unit;
-using InfoCenter.Api.Exceptions;
 using InfoCenter.Api.Interfaces;
 using InfoCenter.Api.Mappers;
-using InfoCenter.Api.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace InfoCenter.Api.Controllers
@@ -37,6 +34,8 @@ namespace InfoCenter.Api.Controllers
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
             var unit = await _unitRepository.GetByIdAsync(id);
+            if (unit is null)
+                return NotFound();
 
             return Ok(unit.ToDTO());
         }
@@ -47,6 +46,10 @@ namespace InfoCenter.Api.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+
+            string? checkResponse = await _unitRepository.CheckCreateUniquenessAsync(unitDTO);
+            if (!string.IsNullOrWhiteSpace(checkResponse))
+                return BadRequest(checkResponse);
 
             var unit = await _unitRepository.CreateAsync(unitDTO.ToModelFromCreateDTO());
 
@@ -63,7 +66,19 @@ namespace InfoCenter.Api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            await _unitRepository.UpdateAsync(id, unitDTO);
+            if (id != unitDTO.Id)
+                return BadRequest();
+
+            if (!await _unitRepository.ExistsAsync(id))
+                return NotFound();
+
+            string? checkResponse = await _unitRepository.CheckUpdateUniquenessAsync(unitDTO);
+            if (!string.IsNullOrWhiteSpace(checkResponse))
+                return BadRequest(checkResponse);
+
+            var unit = await _unitRepository.UpdateAsync(unitDTO);
+            if (unit is null)
+                return NotFound();
 
             return NoContent();
         }
@@ -72,21 +87,17 @@ namespace InfoCenter.Api.Controllers
         [SwaggerOperation(Summary = "Deletes a Unit with the specified ID.")]
         public async Task<IActionResult> DeleteById([FromRoute] int id)
         {
-            try
-            {
-                if (await _articleRepository.HasUnitReferenceAsync(id))
-                    return BadRequest("Some Article has Unit reference, cannot delete it.");
+            if (!await _articleRepository.ExistsAsync(id))
+                return NotFound();
 
-                var existingUnit = await _unitRepository.DeleteAsync(id);
+            if (await _articleRepository.HasUnitReferenceAsync(id))
+                return BadRequest("Some Article has Unit reference, cannot delete it.");
 
-                return NoContent();
-            }
-            catch (DbUpdateException ex)
-            {
-                return BadRequest(
-                    ex.InnerException?.Message ?? "Something went wrong while saving data"
-                );
-            }
+            var existingUnit = await _unitRepository.DeleteAsync(id);
+            if (existingUnit is null)
+                return NotFound();
+
+            return NoContent();
         }
     }
 }

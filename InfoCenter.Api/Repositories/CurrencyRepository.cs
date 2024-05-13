@@ -1,6 +1,5 @@
 using InfoCenter.Api.Data;
 using InfoCenter.Api.DTOs.Currency;
-using InfoCenter.Api.Exceptions;
 using InfoCenter.Api.Interfaces;
 using InfoCenter.Api.Models;
 using Microsoft.EntityFrameworkCore;
@@ -16,38 +15,44 @@ namespace InfoCenter.Api.Repositories
             _context = context;
         }
 
-        private async Task<Currency> GetExistingCurrency(int id)
-        {
-            return await _context.Currencies.FindAsync(id)
-                ?? throw new HttpResponseException(
-                    404,
-                    "Currency does not exists with the given ID."
-                );
-        }
-
-        public async Task<Currency> CreateAsync(Currency currencyModel)
+        public async Task<string?> CheckCreateUniqueness(CreateCurrencyDTO currencyDTO)
         {
             if (
                 await _context.Currencies.AnyAsync(c =>
-                    c.Name.ToLower() == currencyModel.Name.ToLower()
+                    c.Name.ToLower() == currencyDTO.Name.ToLower()
                 )
             )
-                throw new HttpResponseException(400, "Currency name must be unique");
+                return "Name must be unique.";
 
+            return null;
+        }
+
+        public async Task<string?> CheckUpdateUniqueness(UpdateCurrencyDTO currencyModel)
+        {
+            if (
+                await _context.Currencies.AnyAsync(c =>
+                    c.Name.ToLower() == currencyModel.Name.ToLower() && c.Id != currencyModel.Id
+                )
+            )
+                return "Name must be unique.";
+
+            return null;
+        }
+
+
+        public async Task<Currency> CreateAsync(Currency currencyModel)
+        {
             await _context.Currencies.AddAsync(currencyModel);
             await _context.SaveChangesAsync();
 
             return currencyModel;
         }
 
-        public async Task<bool> ExistAsync(int id)
+        public async Task<Currency?> DeleteAsync(int id)
         {
-            return await _context.Currencies.AnyAsync(c => c.Id == id);
-        }
-
-        public async Task<Currency> DeleteAsync(int id)
-        {
-            var existingCurrency = await GetExistingCurrency(id);
+            var existingCurrency = await _context.Currencies.FindAsync(id);
+            if (existingCurrency is null)
+                return null;
 
             _context.Currencies.Remove(existingCurrency);
             await _context.SaveChangesAsync();
@@ -55,27 +60,26 @@ namespace InfoCenter.Api.Repositories
             return existingCurrency;
         }
 
+        public async Task<bool> ExistsAsync(int id)
+        {
+            return await _context.Currencies.AnyAsync(c => c.Id == id);
+        }
+
         public async Task<List<Currency>> GetAllAsync()
         {
             return await _context.Currencies.ToListAsync();
         }
 
-        public async Task<Currency> GetByIdAsync(int id)
+        public async Task<Currency?> GetByIdAsync(int id)
         {
-            return await GetExistingCurrency(id);
+            return await _context.Currencies.FindAsync(id);
         }
 
-        public async Task<Currency> UpdateAsync(int id, UpdateCurrencyDTO currencyDTO)
+        public async Task<Currency?> UpdateAsync(UpdateCurrencyDTO currencyDTO)
         {
-            var existingCurrency = await GetExistingCurrency(id);
-
-            // checking name uniqueness
-            if (
-                await _context.Currencies.AnyAsync(c =>
-                    c.Name.ToLower() == currencyDTO.Name.ToLower() && c.Id != id
-                )
-            )
-                throw new HttpResponseException(400, "Currency name must be unique.");
+            var existingCurrency = await _context.Currencies.FindAsync(currencyDTO.Id);
+            if (existingCurrency is null)
+                return null;
 
             existingCurrency.Name = currencyDTO.Name;
             existingCurrency.Description = currencyDTO.Description;
