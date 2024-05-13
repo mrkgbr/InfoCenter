@@ -1,5 +1,6 @@
 ﻿using InfoCenter.Api.Data.EfConfigs;
 using InfoCenter.Api.Models;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace InfoCenter.Api.Data;

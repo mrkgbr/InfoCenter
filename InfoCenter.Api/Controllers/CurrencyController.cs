@@ -1,7 +1,9 @@
 using InfoCenter.Api.DTOs.Currency;
 using InfoCenter.Api.Interfaces;
 using InfoCenter.Api.Mappers;
+
 using Microsoft.AspNetCore.Mvc;
+
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace InfoCenter.Api.Controllers

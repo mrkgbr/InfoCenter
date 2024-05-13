@@ -2,6 +2,7 @@
 using InfoCenter.Api.DTOs.Contract;
 using InfoCenter.Api.Interfaces;
 using InfoCenter.Api.Models;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace InfoCenter.Api.Repositories;

@@ -1,6 +1,8 @@
 ﻿using System.Net;
 using System.Text.Json;
+
 using InfoCenter.Api.Exceptions;
+
 using Microsoft.AspNetCore.Mvc;
 
 namespace InfoCenter.Api.Middlewares;
