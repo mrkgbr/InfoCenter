@@ -50,7 +50,7 @@ namespace InfoCenter.Api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            string? checkResponse = await _currencyRepository.CheckCreateUniqueness(currencyDTO);
+            string? checkResponse = await _currencyRepository.CheckCreateUniquenessAsync(currencyDTO);
             if (!string.IsNullOrWhiteSpace(checkResponse))
                 return BadRequest(checkResponse);
 
@@ -74,7 +74,7 @@ namespace InfoCenter.Api.Controllers
             if (id != currencyDTO.Id)
                 return BadRequest();
 
-            string? checkResponse = await _currencyRepository.CheckUpdateUniqueness(currencyDTO);
+            string? checkResponse = await _currencyRepository.CheckUpdateUniquenessAsync(currencyDTO);
             if (!string.IsNullOrWhiteSpace(checkResponse))
                 return BadRequest(checkResponse);
 
