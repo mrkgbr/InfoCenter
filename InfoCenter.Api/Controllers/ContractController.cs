@@ -47,7 +47,7 @@ namespace InfoCenter.Api.Controllers
                 return BadRequest(ModelState);
 
             string? checkResponse = await _contractRepo.CheckCreateUniqueness(contractDTO);
-            if (string.IsNullOrWhiteSpace(checkResponse))
+            if (!string.IsNullOrWhiteSpace(checkResponse))
                 return BadRequest(checkResponse);
 
             var contract = await _contractRepo.CreateAsync(contractDTO.ToModelFromCreateDTO());
@@ -68,7 +68,7 @@ namespace InfoCenter.Api.Controllers
                 return NotFound();
 
             string? checkResponse = await _contractRepo.CheckUpdateUniqueness(id, updateDTO);
-            if (string.IsNullOrWhiteSpace(checkResponse))
+            if (!string.IsNullOrWhiteSpace(checkResponse))
                 return BadRequest(checkResponse);
 
             var contract = await _contractRepo.UpdateAsync(id, updateDTO);
