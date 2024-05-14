@@ -42,7 +42,7 @@ public class ArticleDetailController : ControllerBase
     {
         var articleDetail = await _articleDetailRepository.GetByIdAsync(id);
         if (articleDetail is null)
-            return NotFound();
+            return NotFound("Article Detail not found.");
 
         return Ok(articleDetail.ToDTO());
     }
@@ -83,7 +83,7 @@ public class ArticleDetailController : ControllerBase
 
         var articleDetail = await _articleDetailRepository.UpdateAsync(articleDetailDTO);
         if (articleDetail is null)
-            return NotFound();
+            return NotFound("Article Detail not found.");
 
         return NoContent();
     }
@@ -93,7 +93,7 @@ public class ArticleDetailController : ControllerBase
     {
         var articleDetail = await _articleDetailRepository.DeleteAsync(id);
         if (articleDetail is null)
-            return NotFound();
+            return NotFound("Article Detail not found.");
 
         return NoContent();
     }
