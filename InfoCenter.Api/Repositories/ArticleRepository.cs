@@ -119,9 +119,9 @@ namespace InfoCenter.Api.Repositories
             return await _context.Articles.AnyAsync(article => article.UnitId == id);
         }
 
-        public async Task<Article?> UpdateAsync(int id, UpdateArticleDTO articleDTO)
+        public async Task<Article?> UpdateAsync(UpdateArticleDTO articleDTO)
         {
-            var existingArticle = await _context.Articles.FindAsync(id);
+            var existingArticle = await _context.Articles.FindAsync(articleDTO.Id);
             if (existingArticle is null)
                 return null;
 

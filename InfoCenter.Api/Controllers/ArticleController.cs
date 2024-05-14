@@ -40,7 +40,7 @@ namespace InfoCenter.Api.Controllers
         {
             var article = await _articleRepository.GetByIdAsync(id);
             if (article is null)
-                return NotFound();
+                return NotFound("Article not found.");
 
             return Ok(article.ToDTO());
         }
@@ -51,7 +51,7 @@ namespace InfoCenter.Api.Controllers
         {
             var article = await _articleRepository.GetByIdSummaryAsync(id);
             if (article is null)
-                return NotFound();
+                return NotFound("Article not found.");
 
             return Ok(article.ToSummaryDTO());
         }
@@ -81,7 +81,7 @@ namespace InfoCenter.Api.Controllers
         )
         {
             if (id != articleDTO.Id)
-                return BadRequest();
+                return BadRequest("The ID in the route does not match the ID in the request body.");
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -93,9 +93,9 @@ namespace InfoCenter.Api.Controllers
             if (!string.IsNullOrWhiteSpace(message))
                 return BadRequest(message);
 
-            var article = await _articleRepository.UpdateAsync(id, articleDTO);
+            var article = await _articleRepository.UpdateAsync(articleDTO);
             if (article is null)
-                return NotFound();
+                return NotFound("Article not found.");
 
             return NoContent();
         }
@@ -104,11 +104,11 @@ namespace InfoCenter.Api.Controllers
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             if (await _articleDetailRepository.HasArticleReference(id))
-                return BadRequest("Some Article Detail has Article reference, cannot delete");
+                return BadRequest("One or more Article Detail has Article reference, cannot delete");
 
             var existingArticle = await _articleRepository.DeleteAsync(id);
             if (existingArticle is null)
-                return NotFound();
+                return NotFound("Article not found.");
 
             return NoContent();
         }

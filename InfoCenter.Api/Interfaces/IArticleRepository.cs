@@ -15,6 +15,6 @@ namespace InfoCenter.Api.Interfaces
         Task<Article?> GetByIdAsync(int id);
         Task<Article?> GetByIdSummaryAsync(int id);
         Task<bool> HasUnitReferenceAsync(int id);
-        Task<Article?> UpdateAsync(int id, UpdateArticleDTO articleModel);
+        Task<Article?> UpdateAsync(UpdateArticleDTO articleModel);
     }
 }
