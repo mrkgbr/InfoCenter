@@ -89,7 +89,7 @@ namespace InfoCenter.Api.Controllers
                 return NotFound("Contract not found.");
 
             if (await _articleDetailRepository.HasContractReference(id))
-                return BadRequest("Some Article Detail has Contract reference, cannot delete");
+                return BadRequest("One or more Article Detail has Contract reference, cannot delete.");
 
             var contract = await _contractRepo.DeleteAsync(id);
             if (contract is null)

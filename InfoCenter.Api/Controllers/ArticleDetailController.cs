@@ -51,11 +51,13 @@ public class ArticleDetailController : ControllerBase
     public async Task<IActionResult> Create([FromBody] CreateArticleDetailDTO articleDetailDTO)
     {
         if (!await _articleRepository.ExistsAsync(articleDetailDTO.ArticleId))
-            return BadRequest("Article does not exist");
+            return BadRequest("Article does not exist.");
+
         if (!await _contractRepository.ExistsAsync(articleDetailDTO.ContractId))
-            return BadRequest("Contract does not exist");
+            return BadRequest("Contract does not exist.");
+
         if (!await _currencyRepository.ExistsAsync(articleDetailDTO.CurrencyId))
-            return BadRequest("Currency does not exist");
+            return BadRequest("Currency does not exist.");
 
         var articleDetail = await _articleDetailRepository.CreateAsync(
             articleDetailDTO.ToModelFromCreateDTO()
@@ -75,11 +77,13 @@ public class ArticleDetailController : ControllerBase
     )
     {
         if (!await _articleRepository.ExistsAsync(articleDetailDTO.ArticleId))
-            return BadRequest("Article does not exist");
+            return BadRequest("Article does not exist.");
+
         if (!await _contractRepository.ExistsAsync(articleDetailDTO.ContractId))
-            return BadRequest("Contract does not exist");
+            return BadRequest("Contract does not exist.");
+
         if (!await _currencyRepository.ExistsAsync(articleDetailDTO.CurrencyId))
-            return BadRequest("Currency does not exist");
+            return BadRequest("Currency does not exist.");
 
         var articleDetail = await _articleDetailRepository.UpdateAsync(articleDetailDTO);
         if (articleDetail is null)

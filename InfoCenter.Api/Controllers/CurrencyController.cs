@@ -98,7 +98,7 @@ namespace InfoCenter.Api.Controllers
                 return NotFound("Currency not found.");
 
             if (await _articleDetailRepository.HasCurrencyReference(id))
-                return BadRequest("Some Article Detail has Currency reference, cannot delete");
+                return BadRequest("One or more Article Detail has Currency reference, cannot delete.");
 
             var currency = await _currencyRepository.DeleteAsync(id);
             if (currency is null)

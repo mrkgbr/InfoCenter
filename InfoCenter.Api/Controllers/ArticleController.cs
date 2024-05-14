@@ -63,7 +63,7 @@ namespace InfoCenter.Api.Controllers
                 return BadRequest(ModelState);
 
             if (!await _unitRepository.ExistsAsync(articleDTO.UnitId))
-                return BadRequest("Unit does not exist");
+                return BadRequest("Unit does not exist.");
 
             string? message = await _articleRepository.CheckCreateUniquenessAsync(articleDTO);
             if (!string.IsNullOrWhiteSpace(message))
@@ -104,7 +104,7 @@ namespace InfoCenter.Api.Controllers
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             if (await _articleDetailRepository.HasArticleReference(id))
-                return BadRequest("One or more Article Detail has Article reference, cannot delete");
+                return BadRequest("One or more Article Detail has Article reference, cannot delete.");
 
             var existingArticle = await _articleRepository.DeleteAsync(id);
             if (existingArticle is null)
