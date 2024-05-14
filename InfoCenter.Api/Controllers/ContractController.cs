@@ -36,7 +36,7 @@ namespace InfoCenter.Api.Controllers
         {
             var contract = await _contractRepo.GetByIdAsync(id);
             if (contract is null)
-                return NotFound();
+                return NotFound("Contract not found.");
 
             return Ok(contract.ToDTO());
         }
@@ -63,13 +63,13 @@ namespace InfoCenter.Api.Controllers
         )
         {
             if (id != updateDTO.Id)
-                return BadRequest();
+                return BadRequest("The ID in the route does not match the ID in the request body.");
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             if (!await _contractRepo.ExistsAsync(id))
-                return NotFound();
+                return NotFound("Contract not found.");
 
             string? checkResponse = await _contractRepo.CheckUpdateUniquenessAsync(updateDTO);
             if (!string.IsNullOrWhiteSpace(checkResponse))
@@ -77,7 +77,7 @@ namespace InfoCenter.Api.Controllers
 
             var contract = await _contractRepo.UpdateAsync(updateDTO);
             if (contract is null)
-                return NotFound();
+                return NotFound("Contract not found.");
 
             return NoContent();
         }
@@ -86,14 +86,14 @@ namespace InfoCenter.Api.Controllers
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             if (!await _contractRepo.ExistsAsync(id))
-                return NotFound();
+                return NotFound("Contract not found.");
 
             if (await _articleDetailRepository.HasContractReference(id))
                 return BadRequest("Some Article Detail has Contract reference, cannot delete");
 
             var contract = await _contractRepo.DeleteAsync(id);
             if (contract is null)
-                return NotFound();
+                return NotFound("Contract not found.");
 
             return NoContent();
         }

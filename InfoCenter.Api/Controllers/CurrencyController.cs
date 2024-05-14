@@ -40,7 +40,7 @@ namespace InfoCenter.Api.Controllers
         {
             var currency = await _currencyRepository.GetByIdAsync(id);
             if (currency is null)
-                return NotFound();
+                return NotFound("Currency not found.");
 
             return Ok(currency.ToDTO());
         }
@@ -70,22 +70,22 @@ namespace InfoCenter.Api.Controllers
             [FromBody] UpdateCurrencyDTO currencyDTO
         )
         {
+            if (id != currencyDTO.Id)
+                return BadRequest("The ID in the route does not match the ID in the request body.");
+
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-
-            if (id != currencyDTO.Id)
-                return BadRequest();
 
             string? checkResponse = await _currencyRepository.CheckUpdateUniquenessAsync(currencyDTO);
             if (!string.IsNullOrWhiteSpace(checkResponse))
                 return BadRequest(checkResponse);
 
             if (!await _currencyRepository.ExistsAsync(id))
-                return NotFound();
+                return NotFound("Currency not found.");
 
             var currency = await _currencyRepository.UpdateAsync(currencyDTO);
             if (currency is null)
-                return NotFound();
+                return NotFound("Currency not found.");
 
             return NoContent();
         }
@@ -95,14 +95,14 @@ namespace InfoCenter.Api.Controllers
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             if (!await _currencyRepository.ExistsAsync(id))
-                return NotFound();
+                return NotFound("Currency not found.");
 
             if (await _articleDetailRepository.HasCurrencyReference(id))
                 return BadRequest("Some Article Detail has Currency reference, cannot delete");
 
             var currency = await _currencyRepository.DeleteAsync(id);
             if (currency is null)
-                return NotFound();
+                return NotFound("Currency not found.");
 
             return NoContent();
         }

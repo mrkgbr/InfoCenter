@@ -37,7 +37,7 @@ namespace InfoCenter.Api.Controllers
         {
             var unit = await _unitRepository.GetByIdAsync(id);
             if (unit is null)
-                return NotFound();
+                return NotFound("Unit not found.");
 
             return Ok(unit.ToDTO());
         }
@@ -65,14 +65,14 @@ namespace InfoCenter.Api.Controllers
             [FromBody] UpdateUnitDTO unitDTO
         )
         {
+            if (id != unitDTO.Id)
+                return BadRequest("The ID in the route does not match the ID in the request body.");
+
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (id != unitDTO.Id)
-                return BadRequest();
-
             if (!await _unitRepository.ExistsAsync(id))
-                return NotFound();
+                return NotFound("Unit not found.");
 
             string? checkResponse = await _unitRepository.CheckUpdateUniquenessAsync(unitDTO);
             if (!string.IsNullOrWhiteSpace(checkResponse))
@@ -80,7 +80,7 @@ namespace InfoCenter.Api.Controllers
 
             var unit = await _unitRepository.UpdateAsync(unitDTO);
             if (unit is null)
-                return NotFound();
+                return NotFound("Unit not found.");
 
             return NoContent();
         }
@@ -90,14 +90,14 @@ namespace InfoCenter.Api.Controllers
         public async Task<IActionResult> DeleteById([FromRoute] int id)
         {
             if (!await _articleRepository.ExistsAsync(id))
-                return NotFound();
+                return NotFound("Unit not found.");
 
             if (await _articleRepository.HasUnitReferenceAsync(id))
-                return BadRequest("Some Article has Unit reference, cannot delete it.");
+                return BadRequest("One or more Article has Unit reference, cannot delete it.");
 
             var existingUnit = await _unitRepository.DeleteAsync(id);
             if (existingUnit is null)
-                return NotFound();
+                return NotFound("Unit not found.");
 
             return NoContent();
         }
