@@ -9,6 +9,7 @@ public interface IArticleDetailRepository
     Task<ArticleDetail?> DeleteAsync(int id);
     Task<List<ArticleDetail>> GetAllAsync();
     Task<ArticleDetail?> GetByIdAsync(int id);
+    Task<ArticleDetail?> GetByIdSummary(int id);
     Task<bool> HasArticleReference(int id);
     Task<bool> HasCurrencyReference(int id);
     Task<bool> HasContractReference(int id);

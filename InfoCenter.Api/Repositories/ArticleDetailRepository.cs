@@ -46,6 +46,15 @@ public class ArticleDetailRepository : IArticleDetailRepository
         return await _context.ArticleDetails.FindAsync(id);
     }
 
+    public async Task<ArticleDetail?> GetByIdSummary(int id)
+    {
+        return await _context.ArticleDetails
+            .Include(ad => ad.Article)
+            .Include(ad => ad.Contract)
+            .Include(ad => ad.Currency)
+            .FirstOrDefaultAsync(ad => ad.Id == id);
+    }
+
     public async Task<bool> HasArticleReference(int id)
     {
         return await _context.ArticleDetails.AnyAsync(a => a.ArticleId == id);

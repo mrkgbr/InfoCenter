@@ -47,6 +47,16 @@ public class ArticleDetailController : ControllerBase
         return Ok(articleDetail.ToDTO());
     }
 
+    [HttpGet("Summary/{id:int}")]
+    public async Task<IActionResult> GetByIdSummary([FromRoute] int id)
+    {
+        var articleDetail = await _articleDetailRepository.GetByIdSummary(id);
+        if (articleDetail is null)
+            return NotFound("Article Detail not found.");
+
+        return Ok(articleDetail.ToSummaryDTO());
+    }
+
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateArticleDetailDTO articleDetailDTO)
     {
