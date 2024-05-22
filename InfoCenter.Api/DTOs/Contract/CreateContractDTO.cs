@@ -2,22 +2,22 @@
 
 namespace InfoCenter.Api.DTOs.Contract;
 
-public class CreateContractDTO
-{
+public record CreateContractDTO
+(
     [Required]
     [MaxLength(10, ErrorMessage = "Contract Number cannot be longer than 10 characters")]
-    public string ContractNumber { get; set; } = string.Empty;
+    string ContractNumber,
 
     [Required]
     [MaxLength(50, ErrorMessage = "Name cannot be longer than 50 characters")]
-    public string Name { get; set; } = string.Empty;
+    string Name,
 
     [MaxLength(150, ErrorMessage = "Description cannot be longer than 150 characters")]
-    public string? Description { get; set; }
+    string? Description,
 
     [Required]
-    public DateOnly StartDate { get; set; }
+    DateOnly StartDate,
 
     [Required]
-    public DateOnly EndDate { get; set; }
-}
+    DateOnly EndDate
+);

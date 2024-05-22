@@ -8,15 +8,15 @@ public static class ContractMappers
     public static ContractDTO ToDTO(this Contract contractModel)
     {
         return new ContractDTO
-        {
-            Id = contractModel.Id,
-            ContractNumber = contractModel.ContractNumber,
-            Name = contractModel.Name,
-            Description = contractModel.Description,
-            StartDate = contractModel.StartDate,
-            EndDate = contractModel.EndDate,
-            IsActive = contractModel.IsActive
-        };
+        (
+            contractModel.Id,
+            contractModel.ContractNumber,
+            contractModel.Name,
+            contractModel.Description,
+            contractModel.StartDate,
+            contractModel.EndDate,
+            contractModel.IsActive
+        );
     }
 
     public static Contract ToModelFromCreateDTO(this CreateContractDTO contractDTO)

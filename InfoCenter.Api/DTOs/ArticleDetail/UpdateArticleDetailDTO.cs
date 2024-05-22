@@ -2,23 +2,23 @@
 
 namespace InfoCenter.Api.DTOs.ArticleDetail;
 
-public class UpdateArticleDetailDTO
-{
+public record UpdateArticleDetailDTO
+(
     [Required]
-    public int Id { get; set; }
+    int Id,
 
     [Required]
-    public decimal Price { get; set; }
+    decimal Price,
 
     [Required]
-    public bool IsActive { get; set; }
+    int ArticleId,
 
     [Required]
-    public int ArticleId { get; set; }
+    int ContractId,
 
     [Required]
-    public int ContractId { get; set; }
+    int CurrencyId,
 
     [Required]
-    public int CurrencyId { get; set; }
-}
+    bool IsActive
+);
