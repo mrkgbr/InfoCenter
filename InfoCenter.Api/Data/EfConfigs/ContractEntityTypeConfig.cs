@@ -3,7 +3,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace InfoCenter.Api;
+namespace InfoCenter.Api.Data.EfConfigs;
 
 public class ContractEntityTypeConfig : IEntityTypeConfiguration<Contract>
 {
