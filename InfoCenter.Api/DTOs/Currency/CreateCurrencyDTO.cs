@@ -2,13 +2,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace InfoCenter.Api.DTOs.Currency
 {
-    public record CreateCurrencyDTO
-    (
+    public class CreateCurrencyDTO
+    {
         [Required]
         [MaxLength(10, ErrorMessage = "Name cannot be longer than 10 characters")]
-        string Name,
+        public required string Name { get; set; }
 
         [MaxLength(150, ErrorMessage = "Description cannot be longer than 150 characters")]
-        string? Description
-    );
+        public string? Description { get; set; }
+    }
 }

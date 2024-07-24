@@ -1,9 +1,9 @@
 namespace InfoCenter.Api.DTOs.Unit;
 
-public record UnitDTO
-(
-    int Id,
-    string Name,
-    string? Description,
-    bool IsActive
-);
+public class UnitDTO
+{
+    public int Id { get; set; }
+    public required string Name { get; set; }
+    public string? Description { get; set; }
+    public bool IsActive { get; set; }
+}

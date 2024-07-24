@@ -2,12 +2,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace InfoCenter.Api.DTOs.Unit;
 
-public record CreateUnitDTO
-(
+public class CreateUnitDTO
+{
     [Required]
     [MaxLength(10, ErrorMessage = "Name cannot be longer thane 10 characters")]
-    string Name,
+    public required string Name { get; set; }
 
     [MaxLength(150, ErrorMessage = "Description cannot be longer than 150 characters")]
-    string? Description
-);
+    public string? Description { get; set; }
+}

@@ -8,12 +8,12 @@ public static class CurrencyMappers
     public static CurrencyDTO ToDTO(this Currency currencyModel)
     {
         return new CurrencyDTO
-        (
-            currencyModel.Id,
-            currencyModel.Name,
-            currencyModel.Description,
-            currencyModel.IsActive
-        );
+        {
+            Id = currencyModel.Id,
+            Name = currencyModel.Name,
+            Description = currencyModel.Description,
+            IsActive = currencyModel.IsActive
+        };
     }
 
     public static Currency ToModelFromCreateDTO(this CreateCurrencyDTO currencyDTO)

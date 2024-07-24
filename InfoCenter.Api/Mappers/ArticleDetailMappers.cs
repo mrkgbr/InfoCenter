@@ -8,14 +8,14 @@ public static class ArticleDetailMappers
     public static ArticleDetailDTO ToDTO(this ArticleDetail articleDetailModel)
     {
         return new ArticleDetailDTO
-        (
-            articleDetailModel.Id,
-            articleDetailModel.Price,
-            articleDetailModel.ArticleId,
-            articleDetailModel.CurrencyId,
-            articleDetailModel.ContractId,
-            articleDetailModel.IsActive
-        );
+        {
+            Id = articleDetailModel.Id,
+            Price = articleDetailModel.Price,
+            ArticleId = articleDetailModel.ArticleId,
+            CurrencyId = articleDetailModel.CurrencyId,
+            ContractId = articleDetailModel.ContractId,
+            IsActive = articleDetailModel.IsActive
+        };
     }
 
     public static ArticleDetail ToModelFromCreateDTO(this CreateArticleDetailDTO articleDetailDTO)
@@ -32,14 +32,14 @@ public static class ArticleDetailMappers
     public static ArticleDetailSummaryDTO ToSummaryDTO(this ArticleDetail articleDetailModel)
     {
         return new ArticleDetailSummaryDTO
-        (
-            articleDetailModel.Id,
-            articleDetailModel.Price,
-            articleDetailModel.Article.SapNumber,
-            articleDetailModel.Article.Name,
-            articleDetailModel.Contract.Name,
-            articleDetailModel.Currency.Name,
-            articleDetailModel.IsActive
-        );
+        {
+            Id = articleDetailModel.Id,
+            Price = articleDetailModel.Price,
+            ArticleSapNumber = articleDetailModel.Article.SapNumber,
+            ArticleName = articleDetailModel.Article.Name,
+            Contract = articleDetailModel.Contract.Name,
+            Currency = articleDetailModel.Currency.Name,
+            IsActive = articleDetailModel.IsActive
+        };
     }
 }

@@ -2,16 +2,16 @@
 
 namespace InfoCenter.Api.DTOs.ArticleDetail;
 
-public record CreateArticleDetailDTO
-(
-    decimal Price,
+public class CreateArticleDetailDTO
+{
+    public decimal Price { get; set; }
 
     [Required]
-    int ArticleId,
+    public int ArticleId { get; set; }
 
     [Required]
-    int ContractId,
+    public int ContractId { get; set; }
 
     [Required]
-    int CurrencyId
-);
+    public int CurrencyId { get; set; }
+}

@@ -1,12 +1,12 @@
 ﻿namespace InfoCenter.Api.DTOs.Contract;
 
-public record ContractDTO
-(
-    int Id,
-    string ContractNumber,
-    string Name,
-    string? Description,
-    DateOnly StartDate,
-    DateOnly EndDate,
-    bool IsActive
-);
+public class ContractDTO
+{
+    public int Id { get; set; }
+    public required string ContractNumber { get; set; }
+    public required string Name { get; set; }
+    public string? Description { get; set; }
+    public DateOnly StartDate { get; set; }
+    public DateOnly EndDate { get; set; }
+    public bool IsActive { get; set; }
+}

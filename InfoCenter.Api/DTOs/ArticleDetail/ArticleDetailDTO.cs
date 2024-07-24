@@ -1,11 +1,11 @@
 ﻿namespace InfoCenter.Api.DTOs.ArticleDetail;
 
-public record ArticleDetailDTO
-(
-    int Id,
-    decimal Price,
-    int ArticleId,
-    int CurrencyId,
-    int ContractId,
-    bool IsActive
-);
+public class ArticleDetailDTO
+{
+    public int Id { get; set; }
+    public decimal Price { get; set; }
+    public int ArticleId { get; set; }
+    public int CurrencyId { get; set; }
+    public int ContractId { get; set; }
+    public bool IsActive { get; set; }
+}

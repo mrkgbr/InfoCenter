@@ -8,12 +8,12 @@ public static class UnitMappers
     public static UnitDTO ToDTO(this Unit unit)
     {
         return new UnitDTO
-        (
-            unit.Id,
-            unit.Name,
-            unit.Description,
-            unit.IsActive
-        );
+        {
+            Id = unit.Id,
+            Name = unit.Name,
+            Description = unit.Description,
+            IsActive = unit.IsActive
+        };
     }
     public static Unit ToModelFromCreateDTO(this CreateUnitDTO unitDTO)
     {
