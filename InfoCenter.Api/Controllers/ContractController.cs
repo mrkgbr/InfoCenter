@@ -4,98 +4,97 @@ using InfoCenter.Api.Mappers;
 
 using Microsoft.AspNetCore.Mvc;
 
-namespace InfoCenter.Api.Controllers
+namespace InfoCenter.Api.Controllers;
+
+[ApiController]
+[Route("[controller]")]
+public class ContractController : ControllerBase
 {
-    [ApiController]
-    [Route("[controller]")]
-    public class ContractController : ControllerBase
+    private readonly IContractRepository _contractRepo;
+    private readonly IArticleDetailRepository _articleDetailRepository;
+
+    public ContractController(
+        IContractRepository contractRepo,
+        IArticleDetailRepository articleDetailRepository
+    )
     {
-        private readonly IContractRepository _contractRepo;
-        private readonly IArticleDetailRepository _articleDetailRepository;
+        _contractRepo = contractRepo;
+        _articleDetailRepository = articleDetailRepository;
+    }
 
-        public ContractController(
-            IContractRepository contractRepo,
-            IArticleDetailRepository articleDetailRepository
-        )
-        {
-            _contractRepo = contractRepo;
-            _articleDetailRepository = articleDetailRepository;
-        }
+    [HttpGet]
+    public async Task<IActionResult> GetAll()
+    {
+        var contracts = await _contractRepo.GetAllAsync();
+        var contractsDTO = contracts.Select(c => c.ToDTO());
 
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
-        {
-            var contracts = await _contractRepo.GetAllAsync();
-            var contractsDTO = contracts.Select(c => c.ToDTO());
+        return Ok(contractsDTO);
+    }
 
-            return Ok(contractsDTO);
-        }
+    [HttpGet("{id:int}")]
+    public async Task<IActionResult> GetById([FromRoute] int id)
+    {
+        var contract = await _contractRepo.GetByIdAsync(id);
+        if (contract is null)
+            return NotFound("Contract not found.");
 
-        [HttpGet("{id:int}")]
-        public async Task<IActionResult> GetById([FromRoute] int id)
-        {
-            var contract = await _contractRepo.GetByIdAsync(id);
-            if (contract is null)
-                return NotFound("Contract not found.");
+        return Ok(contract.ToDTO());
+    }
 
-            return Ok(contract.ToDTO());
-        }
+    [HttpPost]
+    public async Task<IActionResult> Create([FromBody] CreateContractDTO contractDTO)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
 
-        [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateContractDTO contractDTO)
-        {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+        string? checkResponse = await _contractRepo.CheckCreateUniquenessAsync(contractDTO);
+        if (!string.IsNullOrWhiteSpace(checkResponse))
+            return BadRequest(checkResponse);
 
-            string? checkResponse = await _contractRepo.CheckCreateUniquenessAsync(contractDTO);
-            if (!string.IsNullOrWhiteSpace(checkResponse))
-                return BadRequest(checkResponse);
+        var contract = await _contractRepo.CreateAsync(contractDTO.ToModelFromCreateDTO());
 
-            var contract = await _contractRepo.CreateAsync(contractDTO.ToModelFromCreateDTO());
+        return CreatedAtAction(nameof(GetById), new { id = contract.Id }, contract.ToDTO());
+    }
 
-            return CreatedAtAction(nameof(GetById), new { id = contract.Id }, contract.ToDTO());
-        }
+    [HttpPut("{id:int}")]
+    public async Task<IActionResult> Update(
+        [FromRoute] int id,
+        [FromBody] UpdateContractDTO updateDTO
+    )
+    {
+        if (id != updateDTO.Id)
+            return BadRequest("The ID in the route does not match the ID in the request body.");
 
-        [HttpPut("{id:int}")]
-        public async Task<IActionResult> Update(
-            [FromRoute] int id,
-            [FromBody] UpdateContractDTO updateDTO
-        )
-        {
-            if (id != updateDTO.Id)
-                return BadRequest("The ID in the route does not match the ID in the request body.");
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
 
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+        if (!await _contractRepo.ExistsAsync(id))
+            return NotFound("Contract not found.");
 
-            if (!await _contractRepo.ExistsAsync(id))
-                return NotFound("Contract not found.");
+        string? checkResponse = await _contractRepo.CheckUpdateUniquenessAsync(updateDTO);
+        if (!string.IsNullOrWhiteSpace(checkResponse))
+            return BadRequest(checkResponse);
 
-            string? checkResponse = await _contractRepo.CheckUpdateUniquenessAsync(updateDTO);
-            if (!string.IsNullOrWhiteSpace(checkResponse))
-                return BadRequest(checkResponse);
+        var contract = await _contractRepo.UpdateAsync(updateDTO);
+        if (contract is null)
+            return NotFound("Contract not found.");
 
-            var contract = await _contractRepo.UpdateAsync(updateDTO);
-            if (contract is null)
-                return NotFound("Contract not found.");
+        return NoContent();
+    }
 
-            return NoContent();
-        }
+    [HttpDelete("{id:int}")]
+    public async Task<IActionResult> Delete([FromRoute] int id)
+    {
+        if (!await _contractRepo.ExistsAsync(id))
+            return NotFound("Contract not found.");
 
-        [HttpDelete("{id:int}")]
-        public async Task<IActionResult> Delete([FromRoute] int id)
-        {
-            if (!await _contractRepo.ExistsAsync(id))
-                return NotFound("Contract not found.");
+        if (await _articleDetailRepository.HasContractReference(id))
+            return BadRequest("One or more Article Detail has Contract reference, cannot delete.");
 
-            if (await _articleDetailRepository.HasContractReference(id))
-                return BadRequest("One or more Article Detail has Contract reference, cannot delete.");
+        var contract = await _contractRepo.DeleteAsync(id);
+        if (contract is null)
+            return NotFound("Contract not found.");
 
-            var contract = await _contractRepo.DeleteAsync(id);
-            if (contract is null)
-                return NotFound("Contract not found.");
-
-            return NoContent();
-        }
+        return NoContent();
     }
 }
