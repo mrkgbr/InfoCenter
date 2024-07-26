@@ -3,10 +3,12 @@ using InfoCenter.Api.Helpers;
 using InfoCenter.Api.Interfaces;
 using InfoCenter.Api.Mappers;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InfoCenter.Api.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("[controller]")]
 public class ArticleController : ControllerBase
